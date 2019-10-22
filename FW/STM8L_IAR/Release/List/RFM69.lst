@@ -1,0 +1,675 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V3.10.1.201 for STM8                 23/Jan/2019  18:06:13
+# Copyright 2010-2017 IAR Systems AB.
+# PC-locked license - IAR Embedded Workbench for STMicroelectronics STM8
+#
+#    Source file  =  D:\Projects\Lab equipment\RFUART\FW\STM8L_IAR\src\RFM69.c
+#    Command line =  
+#        -f C:\Users\Gemicle\AppData\Local\Temp\EW595E.tmp ("D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\src\RFM69.c" -e -Ohz --debug
+#        --code_model medium --data_model medium -o "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\Release\Obj" --dlib_config "C:\Program
+#        Files (x86)\IAR Systems\Embedded Workbench 8.0\stm8\LIB\dlstm8mmn.h"
+#        -D STM8L15X_LD -lcN "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\Release\List" -lb "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\Release\List" -I "D:\Projects\Lab
+#        equipment\RFUART\FW\IAR\" -I "D:\Projects\Lab
+#        equipment\RFUART\FW\IAR\src\" -I "D:\Projects\Lab
+#        equipment\RFUART\FW\IAR\inc\" -I "D:\Projects\Lab
+#        equipment\RFUART\FW\IAR\STM8L15x_StdPeriph_Driver\src\" -I
+#        "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\" -I
+#        "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\inc\" -I
+#        "D:\Projects\Lab equipment\RFUART\FW\STM8L_IAR\inc\"
+#        --require_prototypes --vregs 16)
+#    Locale       =  Russian_RUS.1251
+#    List file    =  
+#        D:\Projects\Lab equipment\RFUART\FW\STM8L_IAR\Release\List\RFM69.lst
+#    Object file  =  
+#        D:\Projects\Lab equipment\RFUART\FW\STM8L_IAR\Release\Obj\RFM69.o
+#
+###############################################################################
+
+D:\Projects\Lab equipment\RFUART\FW\STM8L_IAR\src\RFM69.c
+      1          #include "RFM69.h"
+      2          //variables
+      3          uint8_t RF69_TXbuffer[RF69BUFFERSIZE];
+      4          uint8_t RF69_RXbuffer[RF69BUFFERSIZE];
+      5          uint8_t RF69_SyncValue[8] = {WORK_SYNC1, WORK_SYNC2, WORK_SYNC3, WORK_SYNC4, WORK_SYNC5, WORK_SYNC6, WORK_SYNC7, WORK_SYNC8};
+      6          uint8_t RF69_AesKey[16];
+      7          uint8_t Channel = WORK_CHANNEL;
+      8          uint32_t Bitrate = WORK_BITRATE;
+      9          uint32_t Deviation = WORK_DEVIATION;
+     10          uint8_t Txpower = WORK_TXPOWER;
+     11          //uint8_t NodeAddr = WORK_NODEADDR;
+     12          uint8_t NodeAddr = 0; //maybe increment on TX restart
+     13          
+     14          
+     15          
+     16          
+     17          //low level routines
+     18          //write register
+     19          //reg - reg number, v - value
+     20          void RF69_writereg (uint8_t reg, uint8_t v);
+     21          //read register
+     22          //reg - reg number, returns reg value
+     23          uint8_t RF69_readreg (uint8_t reg);
+     24          
+     25          //initial procedure
+     26          void RF69_init(void);
+     27          uint8_t RF69_getversion(void);
+     28          
+     29          
+     30          //set global parameters: bitrate, modulation
+     31          void RF69_setmodulation (uint8_t m);
+     32          void RF69_setdeviation(uint32_t d);
+     33          void RF69_setbitrate(uint32_t br);
+     34          //RC osc. calibration - check and perform if needed
+     35          void RF69_startRCcal(void);
+     36          uint8_t RF69_checkRCcal(void);
+     37          //listen mode settings
+     38          void RF69_setListenMode(uint8_t m1, uint8_t m2, uint8_t m3);
+     39          //batt. management settings
+     40          
+     41          //TX parameters settings: PA select, PA ramp, PAbooster, current trimming
+     42          void RF69_setpower(uint8_t pwr); 
+     43          void RF69_setPAramp(uint8_t p);
+     44          
+     45          //RX parameters: BW, DCC freq., AFC, OOK, RSSI, LNA, DAGC etc.
+     46          void setAFClowbeta(uint8_t a);
+     47          void RF69_setLNAgain (uint8_t g);
+     48          uint8_t RF69_getLNAgain(void);
+     49          void RF69_setRXBW(uint8_t d, uint8_t w);
+     50          void RF69_setAFCBW(uint8_t d, uint8_t w);
+     51          void RF69_setAFC(uint8_t a);
+     52          int16_t RF69_getAFC(void);
+     53          int16_t RF69_getFEI(void); //TODO
+     54          void RF69_startRSSI(void);
+     55          uint8_t RF69_checkRSSI(void);
+     56          //IRQ and IO mapping
+     57          void RF69_setDIOmapping(uint8_t m1, uint8_t m2); 
+     58          uint16_t RF69_getIRQflags(void);
+     59          void RF69_setRSSItr (uint8_t t); //TODO
+     60          
+     61          void RF69_setRXtimeouts(uint8_t t1, uint8_t t2);
+     62          
+     63          void RF69_restartRX(void);
+     64          
+     65          
+     66          
+     67          //packet handler parameters
+     68          //***********************************************************************************************
+     69          
+     70          
+     71          //operative settings
+     72          
+     73          //operating mode (sleep, standby, synth, rx, tx)
+     74          void RF69_setopmode (uint8_t mode);
+     75          //channel
+     76          void RF69_setchannel(uint8_t ch); //uint8_t ch
+     77          //tx power
+     78          void RF69_setpower(uint8_t pwr);
+     79          //get RSSI
+     80          int8_t RF69_getRSSI(void); //propably maybe dependent on channel 
+     81          //get status (IRQ flags)
+     82          uint16_t RF69_getIRQflags(void);
+     83          
+     84          void RF69_setRSSItr (uint8_t t); //TODO;
+     85          int8_t RF69_getRSSItr (void);
+     86          void RF69_setRXstartTO (uint8_t t); //TODO
+     87          void RF69_setRSSITO (uint8_t t); //TODO
+     88          void RF69_setPreambleSize (uint16_t s);
+     89          void RF69_setSyncConfig(uint8_t c);
+     90          void RF69_setSyncValue (void); // up to 8 bytes
+     91          void RF69_setPacketConfig1(uint8_t c);
+     92          void RF69_setPacketConfig2(uint8_t c);
+     93          void RF69_setPayLen (uint8_t l);
+     94          void RF69_setNodeAddr(uint8_t a);
+     95          void RF69_setBrAddr(uint8_t a);
+     96          void RF69_setAutoModes(uint8_t a);
+     97          //AES key
+     98          void RF69_setAESkey(void);
+     99          void RF69_setFIFOtr (uint8_t c, uint8_t tr);
+    100          //temperature
+    101          //test registers******************************************************************************
+    102          //test LNA
+    103          //PA_20 dBm
+    104          //fading margin
+    105          //low beta AFC offset
+    106          void RF69_setAFClowbeta(uint8_t a);
+    107          //fill FIFO
+    108          void RF69_writeFIFO (uint8_t n);
+    109          //read FIFO
+    110          void RF69_readFIFO (uint8_t n);
+    111          //clear FIFO
+    112          void RF69_clearFIFO (void);
+    113          //**********************************************************************************************
+    114          //main communication procedures
+    115          //get packet
+    116          //send packet
+    117          void RF69_sendpacket(uint8_t packet_size, uint8_t address);
+    118          //implementation****************************************************************************************
+    119          //******************************************************************************************************
+    120          void RF69_init(void)
+    121          {
+    122          	RF69_HWreset();
+    123                  delay_ms(100);
+    124          	RF69_setopmode (RF_OPMODE_STANDBY);
+    125                  //delay_ms(200);
+    126                  RF69_setchannel(Channel);
+    127          	RF69_setbitrate (Bitrate);
+    128          	RF69_setmodulation (WORK_MOD_SETTING);
+    129          	RF69_setdeviation(Deviation);
+    130                  
+    131                  //RF69_setDIOmapping(DIOM1_RX, DIOM2_DEFAULT);
+    132                  
+    133          	//TX amp parameters
+    134          	RF69_setpower(Txpower);
+    135          	RF69_setPAramp(WORK_PA_RAMP); //maybe changed
+    136          	//RX parameters
+    137          	RF69_setLNAgain(LNA_200 | G1); //maybe changed or parametrized
+    138                  //RF69_setLNAgain(LNA_200 | G_AUTO);
+    139                  //RX BW
+    140                  RF69_setRXBW(WORK_RBW_DCC, WORK_RBW_BW);
+    141                  //RX AFC
+    142                  RF69_setAFCBW(WORK_AFC_DCC, WORK_AFC_BW);
+    143                  RF69_setAFC(AFC_AUTO_ON | AFC_AUTOCLEAR); //AFCFEI
+    144                  //RF69_setAFC(AFC_AUTOCLEAR); //AFCFEI
+    145                  //RF69_setAFC(0);
+    146                  RF69_setAFClowbeta(0x01);//AFC low beta on
+    147                  RF69_writereg(REG_TESTDAGC, WORK_TESTDAGC);
+    148                  RF69_writereg(REG_TESTAFC, WORK_LBOFFSET); //2.9 kHz
+    149                  //enable RX booster - maybe not mandatory in urban areas
+    150                  RF69_writereg(REG_TESTLNA, LNA_NORM); 
+    151                  
+    152                  //RSSI
+    153                  RF69_setRSSItr(WORK_RSSITR);
+    154                  //timeouts
+    155                  RF69_setRXtimeouts(WORK_RXTO, WORK_RSSITO);
+    156          	//packet handler settings
+    157                  RF69_setPreambleSize(WORK_PREAMBLESIZE);
+    158                  RF69_setSyncConfig(WORK_SYNC_CONFIG);
+    159                  RF69_setSyncValue();
+    160                  RF69_setPayLen(66); //!!!
+    161                  RF69_setPacketConfig1(WORK_PACKETCONFIG1);
+    162                  RF69_setPacketConfig2(WORK_PACKETCONFIG2);
+    163                  RF69_setNodeAddr(NodeAddr);
+    164                  RF69_setBrAddr(WORK_BRADDR);
+    165          
+    166                  RF69_writereg(REG_FIFOTHRESH, WORK_FIFOTRESH);
+    167                  //RF69_setopmode(RF_OPMODE_RECEIVER);
+    168                  RF69_restartRX();
+    169          
+    170                  
+    171          }
+    172          
+    173          //get version
+    174          uint8_t RF69_getversion(void)
+    175          {
+    176          	return RF69_readreg(REG_VERSION);
+    177          }
+    178          
+    179          //RC OSC calibration
+    180          void RF69_startRCcal(void)
+    181          {
+    182          	RF69_writereg(REG_OSC1, 0x80);
+    183          }
+    184          
+    185          uint8_t RF69_checkRCcal(void)
+    186          {
+    187          	uint8_t t;
+    188          	t = RF69_readreg(REG_OSC1);
+    189          	t = (t & 0x40) >> 6;
+    190          	return t; //0 - calibration in progress, 1 - calibration done
+    191          }
+    192          //operative settings
+    193          //operating mode (sleep, standby, synth, rx, tx)
+    194          
+    195          void RF69_setopmode (uint8_t m) //listen always off, sequencer always off
+    196          {
+    197          	RF69_writereg(REG_OPMODE, m);
+    198                  while(!(RF69_readreg(REG_IRQFLAGS1) & MODE_READY)); //wait for mode changing
+    199                  
+    200          }
+    201          
+    202          void RF69_setmodulation (uint8_t m)
+    203          {
+    204          	RF69_writereg(REG_DATAMODUL, m);
+    205          }
+    206          
+    207          void RF69_setbitrate(uint32_t br)
+    208          {
+    209          	uint8_t t1, t2;
+    210          	t1 = HI(FOSC/br);
+    211          	t2 = LO(FOSC/br);
+    212          	RF69_writereg(REG_BITRATEMSB, t1);
+    213          	RF69_writereg(REG_BITRATELSB, t2);
+    214          }
+    215          
+    216          
+    217          // TX channel
+    218          void RF69_setchannel(uint8_t ch) //uint8_t ch
+    219          {
+    220          	//add channel offset/ Attention - offset frequency should be no more than 16777215 Hz!
+    221          	//e.g. for 256 channels max. step is 65535 kHz, for 100 channels - 167 kHz etc.
+    222          	//TODO: add this checking
+    223          	uint32_t t;
+    224          
+    225          	t = NBASE + (F_STEP*F_MUL*ch)/F_PREDIV;
+    226          
+    227                  RF69_writereg(REG_FRFMSB, HIGL(t));
+    228          	RF69_writereg(REG_FRFMID, LOWH(t));
+    229          	RF69_writereg(REG_FRFLSB, LOWL(t));
+    230          }
+    231          
+    232          
+    233          //transmitter*****************************************
+    234          
+    235          void RF69_setdeviation(uint32_t d)
+    236          {
+    237          	
+    238          	uint32_t t;
+    239          	uint8_t t1, t2;
+    240          	t = (d*F_MUL)/F_PREDIV;
+    241          	t1 = HI(t);
+    242          	t2 = LO(t);
+    243          	RF69_writereg(REG_FDEVMSB, t1);
+    244          	RF69_writereg(REG_FDEVLSB, t2);
+    245          	
+    246          }
+    247          
+    248          //
+    249          
+    250          //tx power
+    251          void RF69_setpower(uint8_t pwr) 
+    252          {
+    253          	RF69_writereg(REG_PALEVEL, (WORK_PA_SETTING + Txpower));
+    254          }
+    255          
+    256          void RF69_setPAramp(uint8_t p)
+    257          {
+    258          	RF69_writereg(REG_PARAMP, p);
+    259          }
+    260          
+    261          
+    262          
+    263          
+    264          
+    265          //receiver**********************************
+    266          //AFC
+    267          void RF69_setAFClowbeta(uint8_t a)
+    268          {
+    269          	RF69_writereg(REG_AFCCTRL, a);
+    270          }
+    271          
+    272          //listen mode (usually not in use)
+    273          void RF69_setListenMode(uint8_t m1, uint8_t m2, uint8_t m3)
+    274          {
+    275          	RF69_writereg(REG_LISTEN1, m1);
+    276          	RF69_writereg(REG_LISTEN2, m2);
+    277          	RF69_writereg(REG_LISTEN3, m3);
+    278          	
+    279          }
+    280          
+    281          //LNA settings
+    282          
+    283          void RF69_setLNAgain (uint8_t g)
+    284          {
+    285          	RF69_writereg(REG_LNA, g);
+    286          }
+    287          
+    288          //get LNA gain
+    289          uint8_t RF69_getLNAgain(void)
+    290          {
+    291          	return (RF69_readreg(REG_LNA) & 0x38) >> 3;
+    292          }
+    293          
+    294          
+    295          //RX bandwidth
+    296          void RF69_setRXBW(uint8_t d, uint8_t w) 
+    297          {
+    298              RF69_writereg(REG_RXBW, (d | w));
+    299          }
+    300          
+    301          void RF69_setAFCBW(uint8_t d, uint8_t w)
+    302          {
+    303              RF69_writereg(REG_AFCBW, (d | w));
+    304          }
+    305          
+    306          //reg OOK Peak
+    307          
+    308          //reg OOK Avg
+    309          
+    310          //reg OOK Fix
+    311          
+    312          //AFC settings
+    313          void RF69_setAFC(uint8_t a)
+    314          {
+    315          	RF69_writereg(REG_AFCFEI, a);
+    316          }
+    317          
+    318          
+    319          int16_t RF69_getAFC(void)//TODO
+    320          {
+    321          	return ((int16_t)RF69_readreg(REG_AFCMSB)) << 8 + (int16_t)RF69_readreg(REG_AFCLSB);
+    322          }
+    323          
+    324          int16_t RF69_getFEI(void) //TODO
+    325          {
+    326          	return ((int16_t)RF69_readreg(REG_FEIMSB)) << 8 + (int16_t)RF69_readreg(REG_FEILSB);
+    327          }
+    328          
+    329          //start RSSI
+    330          
+    331          void RF69_startRSSI(void)
+    332          {
+    333            RF69_writereg(REG_RSSICONFIG, 0x01);
+    334          }
+    335          uint8_t RF69_checkRSSI(void)
+    336          {
+    337            return (RF69_readreg(REG_RSSICONFIG) & 0x02);
+    338          }
+    339          
+    340          //get RSSI
+    341          int8_t RF69_getRSSI(void) //propably maybe dependent on channel 
+    342          {
+    343            //RF69_startRSSI();
+    344            //while(!(RF69_checkRSSI()));
+    345            //return -(RF69_readreg(REG_RSSIVALUE)/2); //divide by 2 and negative
+    346            return RF69_readreg(REG_RSSIVALUE)/2;
+    347          }
+    348          
+    349          //DIO mapping
+    350          //temporary
+    351          void RF69_setDIOmapping(uint8_t m1, uint8_t m2)//TODO
+    352          {
+    353              RF69_writereg(REG_DIOMAPPING1, m1); 
+    354              RF69_writereg(REG_DIOMAPPING2, m2); 
+    355          }
+    356          //get irq flags - TODO!!!
+    357          uint16_t RF69_getIRQflags(void)
+    358          {
+    359          	return ((uint16_t)RF69_readreg(REG_IRQFLAGS1)) << 8 + RF69_readreg(REG_IRQFLAGS2); //maybe vice versa
+    360          }
+    361          //set RSSI threshold
+    362          void RF69_setRSSItr (uint8_t t) //TODO
+    363          {
+    364            RF69_writereg(REG_RSSITHRESH, t);
+    365          }
+    366          //get RSSI treshold
+    367          int8_t RF69_getRSSItr (void)
+    368          {
+    369          	return -(RF69_readreg(REG_RSSITHRESH)/2); //divide by 2 and negative
+    370          }
+    371          
+    372          //set RX timeouts
+    373          void RF69_setRXtimeouts(uint8_t t1, uint8_t t2)
+    374          {
+    375              RF69_writereg(REG_RXTIMEOUT1, t1);
+    376              RF69_writereg(REG_RXTIMEOUT2, t2);
+    377              
+    378          }
+    379          
+    380          //packet handler*********************************************************************************
+    381          
+    382          //set preamble size
+    383          void RF69_setPreambleSize (uint16_t s)
+    384          {
+    385          	RF69_writereg(PREAMBLEMSB, s >> 8);
+    386          	RF69_writereg(PREAMBLELSB, s & 0x00FF);
+    387          }
+    388          //set sync config
+    389          void RF69_setSyncConfig(uint8_t c)
+    390          {
+    391          	RF69_writereg(REG_SYNCCONFIG, c);
+    392          }
+    393          //set sync value - 8 bytes
+    394          void RF69_setSyncValue (void) //8 bytes. TODO
+    395          {
+    396              uint8_t i;
+    397              for(i=0; i < SYNC_SIZE+1; i++)
+    398              {
+    399                RF69_writereg(REG_SYNCVALUE1+i, RF69_SyncValue[i]);
+    400              }
+    401          }
+    402          //packet format
+    403          void RF69_setPacketConfig1(uint8_t c)
+    404          {
+    405          	RF69_writereg(REG_PACKETCONFIG1, c);
+    406          }	
+    407          //packet config 2
+    408          void RF69_setPacketConfig2(uint8_t c)
+    409          {
+    410          	RF69_writereg(REG_PACKETCONFIG2, c);
+    411          }	
+    412          //payload length
+    413          void RF69_setPayLen (uint8_t l)
+    414          {
+    415          	RF69_writereg(REG_PAYLOADLENGTH, l);
+    416          }
+    417          
+    418          //node address
+    419          void RF69_setNodeAddr(uint8_t a)
+    420          {
+    421          	RF69_writereg(REG_NODEADRS, a);
+    422          }
+    423          //broadcast address
+    424          void RF69_setBrAddr(uint8_t a)
+    425          {
+    426                  RF69_writereg(REG_BROADCASTADRS, a);
+    427          }
+    428          
+    429          
+    430          //auto modes
+    431          void RF69_setAutoModes(uint8_t a)
+    432          {
+    433          	RF69_writereg(REG_AUTOMODES , a);
+    434          }
+    435          //FIFO threshold
+    436          void RF69_setFIFOtr (uint8_t c, uint8_t tr) //condition; FIFO treshold
+    437          {
+    438          	RF69_writereg(REG_FIFOTHRESH, ((c <<7) | (tr & 0x7F)));
+    439          }
+    440          
+    441          //AES key
+    442          
+    443          void RF69_setAESkey(void)
+    444          {
+    445          	uint8_t i;
+    446          	for(i = 0; i < 16; i++)
+    447          	RF69_writereg(REG_AESKEY1 + i, RF69_AesKey[i]);
+    448          		
+    449          }
+    450          
+    451          //temperature
+    452          
+    453          //test registers******************************************************************************
+    454          
+    455          //test LNA
+    456          
+    457          //PA_20 dBm
+    458          
+    459          //fading margin
+    460          
+    461          //low beta AFC offset
+    462          
+    463          //fill FIFO
+    464          void RF69_writeFIFO (uint8_t n)
+    465          {
+    466            
+    467          }
+    468          //read FIFO
+    469          void RF69_readFIFO (uint8_t n)
+    470          {
+    471            uint8_t i;
+    472            for (i = 0; i < n; i++) RF69_RXbuffer[i] = RF69_readreg(REG_FIFO);
+    473          }
+    474          //clear FIFO
+    475          void RF69_clearFIFO (void)
+    476          {
+    477            //uint8_t i;
+    478            //for(i = 0 ; i < RFM69_BUFFER_SIZE; ++i)   { RF69_readreg(REG_FIFO); }       // read every register one by one
+    479            RF69_writereg(REG_IRQFLAGS2, FIFO_OVR);                      // clear flag if overrun
+    480          }
+    481          //**********************************************************************************************
+    482          //main communication procedures
+    483          
+    484          //get packet
+    485          
+    486          //send packet
+    487          
+    488          void RF69_sendpacket(uint8_t packet_size, uint8_t address)
+    489          {
+    490          
+    491            uint8_t i;
+    492          
+    493            if(packet_size > RFM69_BUFFER_SIZE-1)  packet_size = RFM69_BUFFER_SIZE-1;                         // check size of the package
+    494            RF69_clearFIFO();
+    495            
+    496            RF69_setopmode (RF_OPMODE_TRANSMITTER);                        // makes transmitter on
+    497            RF69_TXbuffer[0] = packet_size+1;
+    498            RF69_TXbuffer[1] = address;
+    499          
+    500            //RF69_writereg(REG_FIFO, packet_size + 1);                                    // transmit the packet size into FIFO
+    501            //RF69_writereg(REG_FIFO, address);                                            // transmit address into FIFO
+    502            //for(i = 0 ; i < packet_size ; ++i)
+    503            for(i = 0 ; i < packet_size+2 ; i++)
+    504            {
+    505              RF69_writereg(REG_FIFO, RF69_TXbuffer[i]); // transmit packet payload into FIFO
+    506            }
+    507             checkDIO0();
+    508            //exit on EXTI
+    509            }
+    510          
+    511          void RF69_restartRX(void)
+    512          {
+    513            RF69_RXtimeout = 0;
+    514            RxState = 0;
+    515            RF69_setopmode (RF_OPMODE_STANDBY);
+    516            RF69_clearFIFO();
+    517            RF69_setAFC(AFC_AUTO_ON | AFC_AUTOCLEAR); //AFCFEI
+    518            //RF69_setDIOmapping(DIOM1_RXWAIT, DIOM2_DEFAULT);
+    519            RF69_setDIOmapping(DIOM1_RX, DIOM2_DEFAULT);
+    520            RF69_setPacketConfig2(WORK_PACKETCONFIG2);
+    521            RF69_setopmode (RF_OPMODE_RECEIVER);
+    522            //start new RSSI measuring
+    523            RF69_startRSSI();
+    524            
+    525          }
+    526            
+    527          
+    528          
+    529          
+    530          //**********************************************************************************************
+    531          
+    532          //low level routines
+    533          //based on external NCS handling (RF69_select, RF69_deselect) and SPI transfer (spi_transfer) functions
+    534          
+    535          
+    536          //write register
+    537          //reg - reg number, v - value
+    538          void RF69_writereg (uint8_t reg, uint8_t v)
+    539          {
+    540          	
+    541              RF69_select();
+    542              spi_transfer(reg | 0x80);
+    543              spi_transfer(v);
+    544              RF69_deselect();
+    545          	
+    546          }
+    547          //read register
+    548          //reg - reg number, returns reg value
+    549          uint8_t RF69_readreg (uint8_t reg)
+    550          {
+    551              
+    552              uint8_t r;
+    553              RF69_select();
+    554              spi_transfer(reg & ~0x80);
+    555              r = spi_transfer(0);
+    556              RF69_deselect();
+    557              return r;
+    558          	
+    559          }
+    560          
+    561          
+    562          
+    563          
+    564          
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       6  ??Subroutine4_0
+      18  ?Subroutine0
+       8  ?Subroutine1
+       8  ?Subroutine2
+       4  ?Subroutine3
+       4  Bitrate
+       1  Channel
+       4  Deviation
+       1  NodeAddr
+      16  RF69_AesKey
+      66  RF69_RXbuffer
+       8  RF69_SyncValue
+      66  RF69_TXbuffer
+      13  RF69_checkRCcal
+       9  RF69_checkRSSI
+      10  RF69_clearFIFO
+      21  RF69_getAFC
+      21  RF69_getFEI
+      21  RF69_getIRQflags
+      12  RF69_getLNAgain
+       8  RF69_getRSSI
+       9  RF69_getRSSItr
+       6  RF69_getversion
+     210  RF69_init
+      38  RF69_readFIFO
+      34  RF69_readreg
+      56  RF69_restartRX
+      83  RF69_sendpacket
+      34  RF69_setAESkey
+       8  RF69_setAFC
+      14  RF69_setAFCBW
+       8  RF69_setAFClowbeta
+       8  RF69_setAutoModes
+       8  RF69_setBrAddr
+      24  RF69_setDIOmapping
+      25  RF69_setFIFOtr
+       8  RF69_setLNAgain
+      37  RF69_setListenMode
+       8  RF69_setNodeAddr
+       8  RF69_setPAramp
+       8  RF69_setPacketConfig1
+       8  RF69_setPacketConfig2
+       8  RF69_setPayLen
+      25  RF69_setPreambleSize
+       8  RF69_setRSSItr
+      14  RF69_setRXBW
+      24  RF69_setRXtimeouts
+       8  RF69_setSyncConfig
+      34  RF69_setSyncValue
+      39  RF69_setbitrate
+      79  RF69_setchannel
+      41  RF69_setdeviation
+       8  RF69_setmodulation
+      19  RF69_setopmode
+      13  RF69_setpower
+      10  RF69_startRCcal
+      10  RF69_startRSSI
+       1  RF69_writeFIFO
+      35  RF69_writereg
+       1  Txpower
+
+ 
+ 1 177 bytes in section .far_func.text
+   149 bytes in section .near.bss
+    18 bytes in section .near.data
+ 
+ 1 177 bytes of CODE memory
+   167 bytes of DATA memory
+
+Errors: none
+Warnings: none

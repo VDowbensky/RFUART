@@ -1,0 +1,344 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V3.11.1.207 for STM8                 26/Jul/2019  14:50:18
+# Copyright 2010-2019 IAR Systems AB.
+# PC-locked license - IAR Embedded Workbench for STMicroelectronics STM8
+#
+#    Source file  =  
+#        D:\Projects\Lab
+#        equipment\RFUART\FW\pingpong\STM8L_pingpong\src\uart_commands.c
+#    Command line =  
+#        -f C:\Users\Gemicle\AppData\Local\Temp\EWC7E2.tmp ("D:\Projects\Lab
+#        equipment\RFUART\FW\pingpong\STM8L_pingpong\src\uart_commands.c" -e
+#        -Ohz --debug --code_model medium --data_model medium -o
+#        "D:\Projects\Lab
+#        equipment\RFUART\FW\pingpong\STM8L_pingpong\Debug\Obj" --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.3\stm8\LIB\dlstm8mmn.h" -D STM8L15X_LD -lcN "D:\Projects\Lab
+#        equipment\RFUART\FW\pingpong\STM8L_pingpong\Debug\List" -lb
+#        "D:\Projects\Lab
+#        equipment\RFUART\FW\pingpong\STM8L_pingpong\Debug\List" -I
+#        "D:\Projects\Lab equipment\RFUART\FW\STM8L_IAR\" -I "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\src\" -I "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\inc\" -I "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\src\" -I
+#        "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\inc\"
+#        --require_prototypes --vregs 16)
+#    Locale       =  Russian_RUS.1251
+#    List file    =  
+#        D:\Projects\Lab
+#        equipment\RFUART\FW\pingpong\STM8L_pingpong\Debug\List\uart_commands.lst
+#    Object file  =  
+#        D:\Projects\Lab
+#        equipment\RFUART\FW\pingpong\STM8L_pingpong\Debug\Obj\uart_commands.o
+#
+###############################################################################
+
+D:\Projects\Lab equipment\RFUART\FW\pingpong\STM8L_pingpong\src\uart_commands.c
+      1          #include "uart_commands.h"
+      2          
+      3          bool CommandFlag;
+      4          
+      5          const uint8_t COMMANDLIST[]= {READALL,4, FREQTEST,5, SETFREQPARAMS,12, SETFREQOFFSET,10, SETSYNCWORD,12, SETCHANNEL,5, SETBITRATE,8, SETTXPARAMS,10, SETRXPARAMS,13, SETPACKETCONFIG, 6, SETADDITIONAL,9, SETTEMPOFFSET,5, READTEMP,4, RESETALL,8};
+      6          
+      7          //functions
+      8          void handlecommand (uint8_t c);
+      9          
+     10          void sendtuningresponse(uint8_t r);
+     11          void sendOK(void);
+     12          void sendERR(void);
+     13          
+     14          
+     15          void handlecommand (uint8_t c)
+     16          
+     17          {
+     18            uint8_t i;
+     19            switch (c)
+     20            {
+     21            case READALL: //checked
+     22              //send all parameters
+     23              //RF69_setopmode (RF_OPMODE_STANDBY);
+     24              //RF69_calctemp();
+     25              //if(FreqTest == TRUE) RF69_setopmode (RF_OPMODE_TRANSMITTER);
+     26              TXbuffer[3] = RF69_getversion();
+     27              //frequency
+     28              TXbuffer[4] = HIGH(F_Base);
+     29              TXbuffer[5] = HIGL(F_Base);
+     30              TXbuffer[6] = LOWH(F_Base);
+     31              TXbuffer[7] = LOWL(F_Base);
+     32              
+     33              TXbuffer[8] = HIGH(F_Step);
+     34              TXbuffer[9] = HIGL(F_Step);
+     35              TXbuffer[10] = LOWH(F_Step);
+     36              TXbuffer[11] = LOWL(F_Step);
+     37              
+     38              TXbuffer[12] = HIGH(F_Offset);
+     39              TXbuffer[13] = HIGL(F_Offset);
+     40              TXbuffer[14] = LOWH(F_Offset);
+     41              TXbuffer[15] = LOWL(F_Offset);
+     42              
+     43              TXbuffer[16] = HIGH(BitRate);
+     44              TXbuffer[17] = HIGL(BitRate);
+     45              TXbuffer[18] = LOWH(BitRate);
+     46              TXbuffer[19] = LOWL(BitRate);
+     47              
+     48              TXbuffer[20] = HIGH(Deviation);
+     49              TXbuffer[21] = HIGL(Deviation);
+     50              TXbuffer[22] = LOWH(Deviation);
+     51              TXbuffer[23] = LOWL(Deviation);
+     52              
+     53              TXbuffer[24] = ModSetting;
+     54              TXbuffer[25] = TxPower;
+     55              
+     56              TXbuffer[26] = Channel;
+     57              
+     58              TXbuffer[27] = RbwDcc;
+     59              TXbuffer[28] = Rbw;
+     60              TXbuffer[29] = AfcDcc;
+     61              TXbuffer[30] = Abw;
+     62              
+     63              TXbuffer[31] = AfcSetting;
+     64              TXbuffer[32] = (uint8_t)LbOffset;
+     65              TXbuffer[33] = RssiTr;
+     66              TXbuffer[34] = Dagc;
+     67              TXbuffer[35] = LnaSetting;
+     68              
+     69              for(i = 0; i<8; i++) TXbuffer[i+36] = SyncWord[i];//43
+     70              TXbuffer[44] = PkConfig1;
+     71              TXbuffer[45] = PkConfig2;
+     72              TXbuffer[46] = NdAddr;
+     73              
+     74              TXbuffer[47] = RxTo;
+     75              TXbuffer[48] = RssiTo;
+     76              TXbuffer[49] = HI(RF69To);
+     77              TXbuffer[50] = LO(RF69To);
+     78              TXbuffer[51] = RxDelay;
+     79              
+     80              TXbuffer[52] = (uint8_t)Tcal;
+     81              TXbuffer[53] = (uint8_t)TcalValue;
+     82              TXbuffer[54] = HI(Tslope);
+     83              TXbuffer[55] = LO(Tslope);
+     84              
+     85              TXbuffer[56] = HIGH(PkCount);
+     86              TXbuffer[57] = HIGL(PkCount);
+     87              TXbuffer[58] = LOWH(PkCount);
+     88              TXbuffer[59] = LOWL(PkCount);
+     89          
+     90              TXbuffer[60] = PkDelay;
+     91          
+     92              sendtuningresponse(61); //compute lenght here
+     93              break;
+     94              
+     95            case FREQTEST: //checked
+     96              //if 1 - switch to OOK mode, TX on for frequency measuring
+     97              if((RXbuffer[3] & 0x01) != 0)
+     98              {
+     99                //save RF69 state if necessary
+    100                FreqTest = TRUE;
+    101                RF69_setopmode (RF_OPMODE_STANDBY);
+    102                //switch to OOK mode and set 1
+    103                RF69_setmodulation(DATA_MODE_NOBITSYNC | MOD_TYPE_OOK | MOD_SHAPING_NONE);
+    104                RF69_setopmode (RF_OPMODE_TRANSMITTER);
+    105                
+    106              }
+    107              //if 0 - TX off, restore all settings
+    108              else //zero
+    109              {
+    110                RF69_init();
+    111                FreqTest = FALSE;
+    112                //restore RF69 state if necessary
+    113              }
+    114              sendOK();
+    115              break;
+    116                  
+    117            case SETFREQPARAMS: //check!!!
+    118              FLASH_Unlock(FLASH_MemType_Data);
+    119              //set frequency and channel step - from RXbuffer[3]
+    120              F_Base = *(uint32_t *)(&RXbuffer[3]);
+    121              F_Step = *(uint32_t *)(&RXbuffer[7]);
+    122              FLASH_Lock(FLASH_MemType_Data);
+    123              //reload RF69 here
+    124              RF69_setchannel(Channel);
+    125              sendOK();
+    126              break;
+    127              
+    128            case SETFREQOFFSET: //checked
+    129              //set initial freq. offset and temperature drift parameters
+    130              //frequency offset
+    131              FLASH_Unlock(FLASH_MemType_Data);
+    132              F_Offset = *(uint32_t *)(&RXbuffer[3]);
+    133              Tslope = *(int16_t *)(&RXbuffer[7]);
+    134              FLASH_Lock(FLASH_MemType_Data);
+    135              //reload RF69 here
+    136              RF69_setchannel(Channel);
+    137              sendOK();
+    138              break;
+    139              
+    140            case SETSYNCWORD: //check!!!
+    141              //FLASH_Unlock(FLASH_MemType_Data);
+    142              //for(i = 0; i < 8; i++) SyncWord[i] = RXbuffer[i+3];
+    143              //FLASH_Lock(FLASH_MemType_Data);
+    144              //RF69_init();
+    145              //sendOK();
+    146              break;
+    147              
+    148            case SETCHANNEL: //checked
+    149              FLASH_Unlock(FLASH_MemType_Data);
+    150              Channel = RXbuffer[3];
+    151              FLASH_Lock(FLASH_MemType_Data);
+    152              RF69_setchannel(Channel);
+    153              sendOK();
+    154              break;
+    155              
+    156            case SETBITRATE: //check!!!
+    157              FLASH_Unlock(FLASH_MemType_Data);
+    158              BitRate = *(uint32_t *)(&RXbuffer[3]); 
+    159              FLASH_Lock(FLASH_MemType_Data);
+    160              //RF69_init(); //it's not correct. Change bit rate register only
+    161              sendOK();
+    162              break;
+    163              
+    164            case SETTXPARAMS: //check!!!
+    165              FLASH_Unlock(FLASH_MemType_Data);
+    166              //deviation
+    167              Deviation = *(uint32_t *)(&RXbuffer[3]); 
+    168              //mod. setting
+    169              ModSetting = RXbuffer[7];
+    170              //TX power
+    171              TxPower = RXbuffer[8];
+    172              FLASH_Lock(FLASH_MemType_Data);    
+    173              //RF69_init(); //it's not correct. Change modulation and TX power registers only
+    174              RF69_setpower(TxPower);
+    175              sendOK();
+    176              break;
+    177              
+    178            case SETRXPARAMS: //check!!!
+    179              FLASH_Unlock(FLASH_MemType_Data);
+    180              RbwDcc = RXbuffer[3];
+    181              Rbw = RXbuffer[4];
+    182              AfcDcc = RXbuffer[5];
+    183              Abw = RXbuffer[6];
+    184              AfcSetting = RXbuffer[7];
+    185              LbOffset = RXbuffer[8];
+    186              RssiTr = RXbuffer[9];
+    187              Dagc = RXbuffer[10];
+    188              LnaSetting = RXbuffer[11];
+    189              FLASH_Lock(FLASH_MemType_Data);
+    190              //RF69_init();//it's not correct. Change RX registers only
+    191              sendOK();
+    192              break;
+    193              
+    194            case SETPACKETCONFIG: //check!!!
+    195              FLASH_Unlock(FLASH_MemType_Data);
+    196              PkConfig1 = RXbuffer[3];
+    197              PkConfig2 = RXbuffer[4];
+    198              FLASH_Lock(FLASH_MemType_Data);
+    199              //RF69_init();
+    200              sendOK();
+    201              break;
+    202              
+    203            case SETADDITIONAL: //check!!!
+    204              FLASH_Unlock(FLASH_MemType_Data);
+    205              //packet count
+    206              PkCount = *(uint32_t *)(&RXbuffer[3]);
+    207              //packet delay
+    208              PkDelay = RXbuffer[7];
+    209              FLASH_Lock(FLASH_MemType_Data);
+    210              RF69_init();
+    211              sendOK();
+    212              break;
+    213              //RX initial timeout
+    214             //RxTo = RXbuffer[8];
+    215              //RSSI timeout
+    216              //RssiTo = RXbuffer[9];
+    217              //RF69 reload timeout
+    218              //RF69To = *(uint16_t*)(&RXbuffer[10]); 
+    219              //inter-packet RX delay
+    220              //RxDelay = RXbuffer[12];
+    221              
+    222            case SETTEMPOFFSET:
+    223              RF69_setopmode (RF_OPMODE_STANDBY);
+    224              FLASH_Unlock(FLASH_MemType_Data); 
+    225              Tcal = RXbuffer[3];
+    226              //read temp. value
+    227              TcalValue = RF69_tempmeas();
+    228              FLASH_Lock(FLASH_MemType_Data);
+    229              if(FreqTest == TRUE) RF69_setopmode (RF_OPMODE_TRANSMITTER);
+    230              sendOK();
+    231              break;
+    232              
+    233            case READTEMP:
+    234              TXbuffer[3] = Temperature;
+    235              sendtuningresponse(4);
+    236              break;      
+    237              
+    238            case RESETALL: //check!!!
+    239              //check password - not implemented
+    240              //restore initial parameters
+    241              
+    242              //init RF69
+    243              //RF69_init();
+    244              sendOK();
+    245              break;
+    246          
+    247            default: //nothing to do
+    248              break;
+    249            }
+    250            //clear RX buffer here if necessary 
+    251          }
+    252          
+    253          void sendtuningresponse(uint8_t r)
+    254          {
+    255            //TX buffer
+    256            TXbuffer[0] = HI(TXPREFIX);
+    257            TXbuffer[1] = LO(TXPREFIX);
+    258            TXbuffer[2] = Command;
+    259            TXbuffer[r] = compTxCRC(r);
+    260            USART_SendBlock(r);
+    261            
+    262          }
+    263          
+    264          void sendOK(void)
+    265          {
+    266            TXbuffer[3] = RESP_OK;
+    267            sendtuningresponse(4);
+    268          }
+    269          
+    270          void sendERR(void)
+    271          {
+    272            TXbuffer[3] = RESP_ERR;
+    273            sendtuningresponse(4);
+    274          }
+    275          
+    276          
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       7  ?Subroutine0
+       7  ?Subroutine1
+       7  ?Subroutine2
+       7  ?Subroutine3
+      13  ?Subroutine4
+      10  ?Subroutine5
+      10  ?Subroutine6
+      28  COMMANDLIST
+       1  CommandFlag
+     812  handlecommand
+      10  sendERR
+      10  sendOK
+      43  sendtuningresponse
+
+ 
+ 936 bytes in section .far_func.text
+   1 byte  in section .near.bss
+  28 bytes in section .near.rodata
+ 
+ 936 bytes of CODE  memory
+  28 bytes of CONST memory
+   1 byte  of DATA  memory
+
+Errors: none
+Warnings: none

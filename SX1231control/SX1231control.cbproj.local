@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2019.01.17 12:44:21.862.cpp,C:\Users\Gemicle\Documents\RAD Studio\Projects\Unit1.cpp=D:\Projects\Lab equipment\RFUART\PC soft\Unit_main.cpp</Transaction>
+    <Transaction>2019.01.17 12:44:21.876.h,C:\Users\Gemicle\Documents\RAD Studio\Projects\Unit1.h=D:\Projects\Lab equipment\RFUART\PC soft\Unit_main.h</Transaction>
+    <Transaction>2019.01.17 12:44:21.876.dfm,C:\Users\Gemicle\Documents\RAD Studio\Projects\Unit1.dfm=D:\Projects\Lab equipment\RFUART\PC soft\Unit_main.dfm</Transaction>
+    <Transaction>2019.01.17 12:44:39.331.cbproj,C:\Users\Gemicle\Documents\RAD Studio\Projects\Project1.cbproj=D:\Projects\Lab equipment\RFUART\PC soft\SX1231control.cbproj</Transaction>
+    <Transaction>2019.02.06 10:31:58.304.cpp,D:\Projects\Lab equipment\current test\CT PC soft\Unit_Cmd.cpp=</Transaction>
+    <Transaction>2019.02.06 10:32:02.752.cpp,D:\Projects\Lab equipment\current test\CT PC soft\Unit_Serial.cpp=</Transaction>
+  </Transactions>
+</BorlandProject>

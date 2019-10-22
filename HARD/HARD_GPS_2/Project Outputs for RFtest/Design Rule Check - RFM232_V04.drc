@@ -1,0 +1,60 @@
+Protel Design System Design Rule Check
+PCB File : D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V04.PcbDoc
+Date     : 09.02.2019
+Time     : 8:51:44
+
+Processing Rule : Clearance Constraint (Gap=0.2mm) (All),(All)
+Rule Violations :0
+
+Processing Rule : Short-Circuit Constraint (Allowed=No) (All),(All)
+Rule Violations :0
+
+Processing Rule : Un-Routed Net Constraint ( (All) )
+Rule Violations :0
+
+Processing Rule : Modified Polygon (Allow modified: No), (Allow shelved: No)
+Rule Violations :0
+
+Processing Rule : Width Constraint (Min=0.2mm) (Max=3mm) (Preferred=0.25mm) (All)
+Rule Violations :0
+
+Processing Rule : Power Plane Connect Rule(Relief Connect )(Expansion=0.508mm) (Conductor Width=0.254mm) (Air Gap=0.254mm) (Entries=4) (All)
+Rule Violations :0
+
+Processing Rule : Hole Size Constraint (Min=0.025mm) (Max=5mm) (All)
+Rule Violations :0
+
+Processing Rule : Hole To Hole Clearance (Gap=0.254mm) (All),(All)
+Rule Violations :0
+
+Processing Rule : Minimum Solder Mask Sliver (Gap=0mm) (All),(All)
+Rule Violations :0
+
+Processing Rule : Silk To Solder Mask (Clearance=0.02mm) (IsPad),(All)
+   Violation between Silk To Solder Mask Clearance Constraint: (Collision < 0.02mm) Between Pad BT1-1(14.5mm,8.5mm) on Multi-Layer And Track (13.5mm,2mm)(13.5mm,38mm) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [0mm]
+   Violation between Silk To Solder Mask Clearance Constraint: (Collision < 0.02mm) Between Pad BT1-2(14.5mm,20mm) on Multi-Layer And Track (13.5mm,2mm)(13.5mm,38mm) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [0mm]
+   Violation between Silk To Solder Mask Clearance Constraint: (Collision < 0.02mm) Between Pad C11-2(18.825mm,8.2mm) on Top Layer And Text "C9" (19.1mm,8.5mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]
+   Violation between Silk To Solder Mask Clearance Constraint: (Collision < 0.02mm) Between Pad L1-2(47.335mm,12.4mm) on Top Layer And Text "C8" (48mm,13.25mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]
+   Violation between Silk To Solder Mask Clearance Constraint: (Collision < 0.02mm) Between Pad S1-1(32.5mm,37.5mm) on Multi-Layer And Track (13.5mm,38mm)(69mm,38mm) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [0mm]
+   Violation between Silk To Solder Mask Clearance Constraint: (Collision < 0.02mm) Between Pad S1-2(27.5mm,37.5mm) on Multi-Layer And Track (13.5mm,38mm)(69mm,38mm) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [0mm]
+   Violation between Silk To Solder Mask Clearance Constraint: (Collision < 0.02mm) Between Pad S2-1(27.5mm,2.5mm) on Multi-Layer And Track (13.5mm,2mm)(69mm,2mm) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [0mm]
+   Violation between Silk To Solder Mask Clearance Constraint: (Collision < 0.02mm) Between Pad S2-2(32.5mm,2.5mm) on Multi-Layer And Track (13.5mm,2mm)(69mm,2mm) on Bottom Overlay [Bottom Overlay] to [Bottom Solder] clearance [0mm]
+   Violation between Silk To Solder Mask Clearance Constraint: (Collision < 0.02mm) Between Pad U2-3(18.35mm,12.1mm) on Top Layer And Text "C16" (18.9mm,12.5mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]
+Rule Violations :9
+
+Processing Rule : Silk to Silk (Clearance=0.02mm) (All),(All)
+   Violation between Silk To Silk Clearance Constraint: (Collision < 0.02mm) Between Text "C8" (48mm,13.25mm) on Top Overlay And Track (46.5mm,12.81mm)(46.7mm,12.81mm) on Top Overlay Silk Text to Silk Clearance [0mm]
+Rule Violations :1
+
+Processing Rule : Net Antennae (Tolerance=0mm) (All)
+   Violation between Net Antennae: Via (2.5mm,2.5mm) from Top Layer to Bottom Layer 
+   Violation between Net Antennae: Via (2.5mm,37.5mm) from Top Layer to Bottom Layer 
+Rule Violations :2
+
+Processing Rule : Height Constraint (Min=0mm) (Max=25.4mm) (Prefered=12.7mm) (All)
+Rule Violations :0
+
+
+Violations Detected : 12
+Waived Violations : 0
+Time Elapsed        : 00:00:02

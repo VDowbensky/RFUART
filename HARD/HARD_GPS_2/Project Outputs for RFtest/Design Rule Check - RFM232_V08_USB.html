@@ -1,0 +1,663 @@
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html">
+<style type="text/css">
+		h1, h2, h3, h4, h5, h6 {
+			font-family : segoe ui;
+			color : black;
+			background-color : #EDE7D9;
+			padding: 0.3em;
+		}
+
+		h1 {
+			font-size: 1.2em;
+		}		
+
+		h2 {
+			font-size: 1.2em;
+		}
+
+		body {
+			font-family : segoe ui;
+		}
+
+		td, th {
+			padding: 0.5em;
+			text-align : left;
+			width: 10em;
+		}
+		th {
+			background-color : #EEEEEE;
+
+		}
+		th.column1, td.column1 {
+			text-align: left;
+			width : auto;
+		}
+		table {
+			width : 100%;
+			font-size: 0.9em;
+		}
+
+		.DRC_summary_header {
+			padding-bottom : 0.1em;
+			border : 0px solid black;
+			width: 100%;
+			align: left;
+		}
+
+		.DRC_summary_header_col1,
+		.DRC_summary_header_col2, 
+		.DRC_summary_header_col3 {
+			color : black;
+			font-size:100%;
+			padding : 0em;
+			padding-top : 0.2em;
+			padding-bottom 0.2em;
+			border : 0px solid black;
+			vertical-align: top;
+			text-align: left;
+		}
+
+		.DRC_summary_header_col1 {
+			font-weight: bold;
+			width: 8em;
+		}
+
+		.DRC_summary_header_col2 {
+			width: 0.1em;
+		
+		}
+
+		.DRC_summary_header_col3 {
+			width : auto;
+		}
+
+		.header_holder {
+		    Width = 100%;
+		    border = 0px solid green;
+		    padding = 0;
+		}
+
+
+		.front_matter, .front_matter_column1, .front_matter_column2, .front_matter_column3
+		{
+			left : 0;
+			top : 0;
+			padding: 0em;
+			padding-top : 0.1em;
+			border : 0px solid black;
+			width : 100%;
+			vertical-align: top;
+			text-align: left;
+		}
+
+		.front_matter_column1 {
+			width : 8em;
+			font-weight: bold;
+		}
+
+		.front_matter_column2 {
+			width: 0.1em;
+		}
+
+		.front_matter_column3 {
+			width : auto;
+		}
+
+		.total_column1, .total_column {
+			font-weight : bold;
+		}
+		.total_column1 {
+			text-align : left;
+		}
+		.warning, .error {
+			color : red;
+			font-weight : bold;
+		}
+		tr.onmouseout_odd {
+			background-color : #white;
+		}
+		tr.onmouseout_even { 
+			background-color : #FAFAFA;
+		}
+		tr.onmouseover_odd, tr.onmouseover_even { 
+			background-color : #EEEEEE;
+		} 
+		a:link, a:visited, .q a:link,.q a:active,.q {
+			color: #21489e; 
+		}
+		a:link.callback, a:visited.callback { 
+			color: #21489e;
+		}
+		a:link.customize, a:visited.customize {
+			color: #C0C0C0;
+			position: absolute; 
+			right: 10px;
+		}	
+		p.contents_level1 {
+			font-weight : bold;
+			font-size : 110%;
+			margin : 0.5em;
+		}
+		p.contents_level2 {
+			position : relative;
+			left : 20px;
+			margin : 0.5em;
+		}
+	</style><script type="text/javascript">
+		function coordToMils(coord) {
+			var number = coord / 10000;
+			
+			if (number != number.toFixed(3))
+				number = number.toFixed(3);
+
+			return number + 'mil'
+		}
+
+		function coordToMM(coord) {
+			var number = 0.0254 * coord / 10000;
+			
+			if (number != number.toFixed(4))
+				number = number.toFixed(4);
+			
+			return number + 'mm'
+		}
+	
+		function convertCoord(coordNode, units) {
+			for (var i = 0; i < coordNode.childNodes.length; i++) {
+				coordNode.removeChild(coordNode.childNodes[i]);
+			}
+
+			var coord = coordNode.getAttribute('value');
+			if (coord != null) {
+				if (units == 'mm') {
+					textNode = document.createTextNode(coordToMM(coord));
+					coordNode.appendChild(textNode);
+				} else if (units == 'mil') {
+					textNode = document.createTextNode(coordToMils(coord));		
+					coordNode.appendChild(textNode);	
+				}
+			}
+		}
+	
+		function convertUnits(unitNode, units) {
+			for (var i = 0; i < unitNode.childNodes.length; i++) {
+				unitNode.removeChild(unitNode.childNodes[i]);		
+			}
+		
+			textNode = document.createTextNode(units); 
+			unitNode.appendChild(textNode);
+		}
+	
+		function changeUnits(radio_input, units) {
+			if (radio_input.checked) {
+			
+				var elements = document.getElementsByName('coordinate');
+				if (elements) {
+					for (var i = 0; i < elements.length; i++) {
+						convertCoord(elements[i], units);
+					}
+				}
+	
+				var elements = document.getElementsByName('units');
+				if (elements) {
+					for (var i = 0; i < elements.length; i++) {
+						convertUnits(elements[i], units);
+					}
+				}
+			}
+		}
+	</script><title>Design Rule Verification Report</title>
+</head>
+<body onload=""><img ALT="Altium" src="
+			file://C:\Users\Public\Documents\Altium\AD18\Templates\AD_logo.png
+		"><h1>Design Rule Verification Report</h1>
+<table class="header_holder">
+<td class="column1">
+<table class="front_matter">
+<tr class="front_matter">
+<td class="front_matter_column1">Date:</td>
+<td class="front_matter_column2"></td>
+<td class="front_matter_column3">15.04.2019</td>
+</tr>
+<tr class="front_matter">
+<td class="front_matter_column1">Time:</td>
+<td class="front_matter_column2"></td>
+<td class="front_matter_column3">16:11:35</td>
+</tr>
+<tr class="front_matter">
+<td class="front_matter_column1">Elapsed Time:</td>
+<td class="front_matter_column2"></td>
+<td class="front_matter_column3">00:00:00</td>
+</tr>
+<tr class="front_matter">
+<td class="front_matter_column1">Filename:</td>
+<td class="front_matter_column2"></td>
+<td class="front_matter_column3"><a href="file:///D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc" class="file"><acronym title="D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc">D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc</acronym></a></td>
+</tr>
+</table>
+</td>
+<td class="column2">
+<table class="DRC_summary_header">
+<tr>
+<td class="DRC_summary_header_col1">Warnings:</td>
+<td class="DRC_summary_header_col2"></td>
+<td class="DRC_summary_header_col3">0</td></tr>
+<tr>
+<td class="DRC_summary_header_col1">Rule Violations:</td>
+<td class="DRC_summary_header_col2"></td>
+<td class="DRC_summary_header_col3" style="color : red">109</td></tr>
+</table>
+</td>
+</table><a name="IDKK4ZK0QE3U3IKJSPS4G4NCBJIHOR0RWTMT1Z42J4U1NIRKGWJEHH"><h2>Summary</h2></a><table>
+<tr>
+<th class="column1">Warnings</th>
+<th class="column2">Count</th>
+</tr>
+<tr>
+<td style="font-weight : bold; text-align : right" class="column1">Total</td>
+<td style="font-weight : bold" class="column2">0</td>
+</tr>
+</table><br><table>
+<tr>
+<th class="column1">Rule Violations</th>
+<th class="column2">Count</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDM3MLY5XZQLUBJFBMFHYA5QSA4LUR0QUXJSERXEOOEWUWRWJH01GL">Clearance Constraint (Gap=0.2mm) (All),(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDXWQMXHQATBUHF542ZGHBODGXKKUZ1NUSK10OXVBDB4OQSHRSKSNB">Clearance Constraint (Gap=0.3mm) (InNamedPolygon('GND_T_RF')),(InNet('NetC13_2'))</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#ID3DWFCMWGOAI4LJDC4DF45JNAUGWYFYOTGLC2OPBD5BEI3YWDPRAE">Short-Circuit Constraint (Allowed=No) (All),(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDZSZCJBM2O4BMIYQITQTIULKLVNM1SEWCEZ1JBUHSOLXIKADANLZD">Un-Routed Net Constraint ( (All) )</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDBCEMKF5LE2BSCS1UY1RAT414KDNYEOK4MTNUVWGT4KVRMXBYEYRI">Modified Polygon (Allow modified: No), (Allow shelved: No)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDUEBCEYLEZ0JJI05MKKEC5O2DLHV1M1GL1VTEZWH0JZD0CA2M0SUN">Width Constraint (Min=0.2mm) (Max=3mm) (Preferred=0.25mm) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#ID5CWQY5VDJBCOJQCUZCXMB2GXLIEE3OQXYUPGI4OLNPXYZL3CPS3O">Power Plane Connect Rule(Relief Connect )(Expansion=0.508mm) (Conductor Width=0.254mm) (Air Gap=0.254mm) (Entries=4) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDOO2HHS3QOQVYOS5YYTIXRGVBQB01DN4ZG2MJX4IXDKAC2MLSXHSL">Hole Size Constraint (Min=0.025mm) (Max=5mm) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDK3QCVIGGEZSWJSEE2NHHL5H1UKYFHDVERUIZHD4WJIWRXP0CLSJ">Hole To Hole Clearance (Gap=0.254mm) (All),(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDLTXOKOXGDJAGN4YND5BDQIUQYGBG1W1LXM05XOOTH3P4MJSMCOJE">Minimum Solder Mask Sliver (Gap=0mm) (All),(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDQATTO1G30YS2KCDAC0SFMC3BAI5GNGUOMT1E1NGIVN0W0G2D0VSE">Silk To Solder Mask (Clearance=0.02mm) (IsPad),(All)</a></td>
+<td class="column2">78</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDW1SWA2EJQGARIBFXIYLSZD1YKKM5WAETN2ATTK4RRELPY03SFVC">Silk to Silk (Clearance=0.02mm) (All),(All)</a></td>
+<td class="column2">31</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDIUTAGMCAHLCHM5STI35EOH01LBADOBMRQLP1HGMV3KVM4F5BYPEO">Net Antennae (Tolerance=0mm) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDLNZPTJCG5YEZHEX3M4F4PVXQTCWIP0L4GQDGWWSZ4YITTQGGIGF">Height Constraint (Min=0mm) (Max=25.4mm) (Prefered=12.7mm) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr>
+<td style="font-weight : bold; text-align : right" class="column1">Total</td>
+<td style="font-weight : bold" class="column2">109</td>
+</tr>
+</table><br><a name="IDQATTO1G30YS2KCDAC0SFMC3BAI5GNGUOMT1E1NGIVN0W0G2D0VSE"><table>
+<tr>
+<th style="text-align : left" colspan="1" class="rule">Silk To Solder Mask (Clearance=0.02mm) (IsPad),(All)</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2243.332mil|Location2.X=2244.857mil|Location1.Y=1828.962mil|Location2.Y=1830.487mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2243.332mil|Location2.X=2244.857mil|Location1.Y=1828.962mil|Location2.Y=1830.487mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Arc (13.8mm,8mm) on Top Overlay And Pad R13-2(13.75mm,7.3mm) on Top Layer [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2635.95mil|Location2.X=2637.475mil|Location1.Y=1761.912mil|Location2.Y=1763.437mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2635.95mil|Location2.X=2637.475mil|Location1.Y=1761.912mil|Location2.Y=1763.437mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Arc (23.8mm,6.2mm) on Top Overlay And Pad S2-3(23.5mm,5mm) on Multi-Layer [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4273.688mil|Location2.X=4275.212mil|Location1.Y=2427.585mil|Location2.Y=2429.109mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4273.688mil|Location2.X=4275.212mil|Location1.Y=2427.585mil|Location2.Y=2429.109mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad C10-1(65.6mm,22.725mm) on Top Layer And Text "C10" (66mm,22.4mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4272.212mil|Location2.X=4273.737mil|Location1.Y=2462.474mil|Location2.Y=2463.998mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4272.212mil|Location2.X=4273.737mil|Location1.Y=2462.474mil|Location2.Y=2463.998mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad C10-2(65.6mm,24.075mm) on Top Layer And Text "C10" (66mm,22.4mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2404.749mil|Location2.X=2406.274mil|Location1.Y=2171.14mil|Location2.Y=2172.665mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2404.749mil|Location2.X=2406.274mil|Location1.Y=2171.14mil|Location2.Y=2172.665mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad C11-1(18.2mm,16.825mm) on Top Layer And Text "C13" (17.9mm,15.4mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2213.071mil|Location2.X=2214.596mil|Location1.Y=2317.161mil|Location2.Y=2318.686mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2213.071mil|Location2.X=2214.596mil|Location1.Y=2317.161mil|Location2.Y=2318.686mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad C12-1(12.825mm,19.9mm) on Top Layer And Text "C12" (12.498mm,19.509mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2270.795mil|Location2.X=2272.32mil|Location1.Y=2290.923mil|Location2.Y=2292.448mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2270.795mil|Location2.X=2272.32mil|Location1.Y=2290.923mil|Location2.Y=2292.448mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad C12-2(14.175mm,19.9mm) on Top Layer And Text "C12" (12.498mm,19.509mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2552.652mil|Location2.X=2554.177mil|Location1.Y=1948.043mil|Location2.Y=1949.567mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2552.652mil|Location2.X=2554.177mil|Location1.Y=1948.043mil|Location2.Y=1949.567mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad C16-2(20.925mm,11.4mm) on Top Layer And Text "C16" (22.5mm,10.4mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2162.203mil|Location2.X=2163.728mil|Location1.Y=2135.175mil|Location2.Y=2136.699mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2162.203mil|Location2.X=2163.728mil|Location1.Y=2135.175mil|Location2.Y=2136.699mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad C19-1(12.3mm,15.1mm) on Top Layer And Text "C19" (11.305mm,15.503mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2160.863mil|Location2.X=2162.387mil|Location1.Y=2164.716mil|Location2.Y=2166.24mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2160.863mil|Location2.X=2162.387mil|Location1.Y=2164.716mil|Location2.Y=2166.24mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad C19-2(12.3mm,16.7mm) on Top Layer And Text "C19" (11.305mm,15.503mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2096.677mil|Location2.X=2098.202mil|Location1.Y=2029.507mil|Location2.Y=2031.032mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2096.677mil|Location2.X=2098.202mil|Location1.Y=2029.507mil|Location2.Y=2031.032mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad C22-1(9.8mm,12.6mm) on Top Layer And Text "C22" (9.542mm,12.202mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2130.525mil|Location2.X=2132.05mil|Location1.Y=2003.269mil|Location2.Y=2004.794mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2130.525mil|Location2.X=2132.05mil|Location1.Y=2003.269mil|Location2.Y=2004.794mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad C22-2(11.4mm,12.6mm) on Top Layer And Text "C22" (9.542mm,12.202mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4437.548mil|Location2.X=4439.073mil|Location1.Y=2284.92mil|Location2.Y=2286.445mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4437.548mil|Location2.X=4439.073mil|Location1.Y=2284.92mil|Location2.Y=2286.445mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad C23-1(70mm,19.75mm) on Top Layer And Text "C23" (68.941mm,18.679mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4437.374mil|Location2.X=4438.899mil|Location1.Y=2262.497mil|Location2.Y=2264.022mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4437.374mil|Location2.X=4438.899mil|Location1.Y=2262.497mil|Location2.Y=2264.022mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad C23-2(70mm,18.4mm) on Top Layer And Text "C23" (68.941mm,18.679mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1920.367mil|Location2.X=1921.891mil|Location1.Y=2496.686mil|Location2.Y=2498.211mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1920.367mil|Location2.X=1921.891mil|Location1.Y=2496.686mil|Location2.Y=2498.211mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad JP3-2(5.9mm,25.58mm) on Multi-Layer And Text "JP3" (4.837mm,23.916mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1920.367mil|Location2.X=1921.891mil|Location1.Y=2463.206mil|Location2.Y=2464.731mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1920.367mil|Location2.X=1921.891mil|Location1.Y=2463.206mil|Location2.Y=2464.731mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad JP3-3(5.9mm,23.04mm) on Multi-Layer And Text "JP3" (4.837mm,23.916mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1896.875mil|Location2.X=1898.4mil|Location1.Y=2038.601mil|Location2.Y=2040.126mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1896.875mil|Location2.X=1898.4mil|Location1.Y=2038.601mil|Location2.Y=2040.126mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad JP5-1(5.1mm,13.3mm) on Top Layer And Track (5mm,8.3mm)(5mm,15.7mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1896.875mil|Location2.X=1898.4mil|Location1.Y=2013.011mil|Location2.Y=2014.536mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1896.875mil|Location2.X=1898.4mil|Location1.Y=2013.011mil|Location2.Y=2014.536mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad JP5-2(4.85mm,12.65mm) on Top Layer And Track (5mm,8.3mm)(5mm,15.7mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1896.875mil|Location2.X=1898.4mil|Location1.Y=1987.421mil|Location2.Y=1988.946mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1896.875mil|Location2.X=1898.4mil|Location1.Y=1987.421mil|Location2.Y=1988.946mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad JP5-3(4.85mm,12mm) on Top Layer And Track (5mm,8.3mm)(5mm,15.7mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1896.875mil|Location2.X=1898.4mil|Location1.Y=1961.831mil|Location2.Y=1963.356mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1896.875mil|Location2.X=1898.4mil|Location1.Y=1961.831mil|Location2.Y=1963.356mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad JP5-4(4.85mm,11.35mm) on Top Layer And Track (5mm,8.3mm)(5mm,15.7mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1896.875mil|Location2.X=1898.4mil|Location1.Y=1936.241mil|Location2.Y=1937.766mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1896.875mil|Location2.X=1898.4mil|Location1.Y=1936.241mil|Location2.Y=1937.766mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad JP5-5(5.1mm,10.7mm) on Top Layer And Track (5mm,8.3mm)(5mm,15.7mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1750.618mil|Location2.X=1752.143mil|Location1.Y=2140.97mil|Location2.Y=2142.495mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1750.618mil|Location2.X=1752.143mil|Location1.Y=2140.97mil|Location2.Y=2142.495mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad JP5-6(2.15mm,15.6mm) on Top Layer And Track (0mm,15.7mm)(1.5mm,15.7mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1756.066mil|Location2.X=1758.104mil|Location1.Y=2105.284mil|Location2.Y=2107.322mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1756.066mil|Location2.X=1758.104mil|Location1.Y=2105.284mil|Location2.Y=2107.322mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (0.013mm &lt; 0.02mm) Between Pad JP5-6(2.15mm,15.6mm) on Top Layer And Track (1.5mm,14.8mm)(1.5mm,15.7mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0.013mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1756.066mil|Location2.X=1758.104mil|Location1.Y=2105.284mil|Location2.Y=2107.322mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1756.066mil|Location2.X=1758.104mil|Location1.Y=2105.284mil|Location2.Y=2107.322mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (0.013mm &lt; 0.02mm) Between Pad JP5-6(2.15mm,15.6mm) on Top Layer And Track (1.5mm,14.8mm)(1.7mm,14.8mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0.013mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1766.955mil|Location2.X=1768.48mil|Location1.Y=2105.541mil|Location2.Y=2107.065mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1766.955mil|Location2.X=1768.48mil|Location1.Y=2105.541mil|Location2.Y=2107.065mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad JP5-6(2.15mm,15.6mm) on Top Layer And Track (1.7mm,14.8mm)(1.7mm,15.9mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1766.955mil|Location2.X=1768.48mil|Location1.Y=2148.84mil|Location2.Y=2150.365mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1766.955mil|Location2.X=1768.48mil|Location1.Y=2148.84mil|Location2.Y=2150.365mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad JP5-6(2.15mm,15.6mm) on Top Layer And Track (1.7mm,15.9mm)(2.6mm,15.9mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1802.385mil|Location2.X=1803.91mil|Location1.Y=2105.541mil|Location2.Y=2107.065mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1802.385mil|Location2.X=1803.91mil|Location1.Y=2105.541mil|Location2.Y=2107.065mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad JP5-6(2.15mm,15.6mm) on Top Layer And Track (2.6mm,14.8mm)(2.6mm,15.9mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1802.385mil|Location2.X=1803.91mil|Location1.Y=2105.541mil|Location2.Y=2107.065mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1802.385mil|Location2.X=1803.91mil|Location1.Y=2105.541mil|Location2.Y=2107.065mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad JP5-6(2.15mm,15.6mm) on Top Layer And Track (2.6mm,14.8mm)(2.8mm,14.8mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1812.765mil|Location2.X=1814.29mil|Location1.Y=2105.541mil|Location2.Y=2107.065mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1812.765mil|Location2.X=1814.29mil|Location1.Y=2105.541mil|Location2.Y=2107.065mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad JP5-6(2.15mm,15.6mm) on Top Layer And Track (2.8mm,14.8mm)(2.8mm,15.7mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1815.212mil|Location2.X=1816.737mil|Location1.Y=2140.97mil|Location2.Y=2142.495mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1815.212mil|Location2.X=1816.737mil|Location1.Y=2140.97mil|Location2.Y=2142.495mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad JP5-6(2.15mm,15.6mm) on Top Layer And Track (2.8mm,15.7mm)(5mm,15.7mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1750.658mil|Location2.X=1752.183mil|Location1.Y=1849.63mil|Location2.Y=1851.155mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1750.658mil|Location2.X=1752.183mil|Location1.Y=1849.63mil|Location2.Y=1851.155mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad JP5-6(2.15mm,8.4mm) on Top Layer And Track (0mm,8.3mm)(1.5mm,8.3mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1756.066mil|Location2.X=1758.104mil|Location1.Y=1849.374mil|Location2.Y=1851.412mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1756.066mil|Location2.X=1758.104mil|Location1.Y=1849.374mil|Location2.Y=1851.412mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (0.013mm &lt; 0.02mm) Between Pad JP5-6(2.15mm,8.4mm) on Top Layer And Track (1.5mm,8.3mm)(1.5mm,9.2mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0.013mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1756.066mil|Location2.X=1758.104mil|Location1.Y=1884.804mil|Location2.Y=1886.842mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1756.066mil|Location2.X=1758.104mil|Location1.Y=1884.804mil|Location2.Y=1886.842mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (0.013mm &lt; 0.02mm) Between Pad JP5-6(2.15mm,8.4mm) on Top Layer And Track (1.5mm,9.2mm)(1.7mm,9.2mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0.013mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1766.955mil|Location2.X=1768.48mil|Location1.Y=1841.761mil|Location2.Y=1843.285mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1766.955mil|Location2.X=1768.48mil|Location1.Y=1841.761mil|Location2.Y=1843.285mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad JP5-6(2.15mm,8.4mm) on Top Layer And Track (1.7mm,8.1mm)(1.7mm,9.2mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1766.955mil|Location2.X=1768.48mil|Location1.Y=1841.761mil|Location2.Y=1843.285mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1766.955mil|Location2.X=1768.48mil|Location1.Y=1841.761mil|Location2.Y=1843.285mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad JP5-6(2.15mm,8.4mm) on Top Layer And Track (1.7mm,8.1mm)(2.6mm,8.1mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1802.385mil|Location2.X=1803.91mil|Location1.Y=1841.761mil|Location2.Y=1843.285mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1802.385mil|Location2.X=1803.91mil|Location1.Y=1841.761mil|Location2.Y=1843.285mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad JP5-6(2.15mm,8.4mm) on Top Layer And Track (2.6mm,8.1mm)(2.6mm,9.2mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1812.765mil|Location2.X=1814.29mil|Location1.Y=1885.061mil|Location2.Y=1886.585mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1812.765mil|Location2.X=1814.29mil|Location1.Y=1885.061mil|Location2.Y=1886.585mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad JP5-6(2.15mm,8.4mm) on Top Layer And Track (2.6mm,9.2mm)(2.8mm,9.2mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1812.765mil|Location2.X=1814.29mil|Location1.Y=1849.63mil|Location2.Y=1851.155mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1812.765mil|Location2.X=1814.29mil|Location1.Y=1849.63mil|Location2.Y=1851.155mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad JP5-6(2.15mm,8.4mm) on Top Layer And Track (2.8mm,8.3mm)(2.8mm,9.2mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1815.26mil|Location2.X=1816.785mil|Location1.Y=1849.63mil|Location2.Y=1851.155mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1815.26mil|Location2.X=1816.785mil|Location1.Y=1849.63mil|Location2.Y=1851.155mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad JP5-6(2.15mm,8.4mm) on Top Layer And Track (2.8mm,8.3mm)(5mm,8.3mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3289.978mil|Location2.X=3291.503mil|Location1.Y=1582.348mil|Location2.Y=1583.873mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3289.978mil|Location2.X=3291.503mil|Location1.Y=1582.348mil|Location2.Y=1583.873mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad M3-4(41mm,1.9mm) on Multi-Layer And Text "M3" (40.325mm,1.511mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2487.427mil|Location2.X=2488.951mil|Location1.Y=1878.501mil|Location2.Y=1880.026mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2487.427mil|Location2.X=2488.951mil|Location1.Y=1878.501mil|Location2.Y=1880.026mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad Q2-2(19.6mm,8.75mm) on Top Layer And Text "Q1" (20mm,8.9mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2396.875mil|Location2.X=2398.4mil|Location1.Y=1834.885mil|Location2.Y=1836.41mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2396.875mil|Location2.X=2398.4mil|Location1.Y=1834.885mil|Location2.Y=1836.41mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad Q2-3(17.2mm,7.8mm) on Top Layer And Text "Q2" (17.738mm,7.259mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3650.238mil|Location2.X=3651.762mil|Location1.Y=2129.905mil|Location2.Y=2131.43mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3650.238mil|Location2.X=3651.762mil|Location1.Y=2129.905mil|Location2.Y=2131.43mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad R10-1(49.8mm,15mm) on Top Layer And Text "R7" (48.35mm,14.9mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3603.568mil|Location2.X=3605.093mil|Location1.Y=2110.294mil|Location2.Y=2111.819mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3603.568mil|Location2.X=3605.093mil|Location1.Y=2110.294mil|Location2.Y=2111.819mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad R10-2(48.3mm,15mm) on Top Layer And Text "R7" (48.35mm,14.9mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4217.951mil|Location2.X=4219.476mil|Location1.Y=2299.497mil|Location2.Y=2301.022mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4217.951mil|Location2.X=4219.476mil|Location1.Y=2299.497mil|Location2.Y=2301.022mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad R12-1(63.65mm,20.1mm) on Top Layer And Text "R12" (61.905mm,19.695mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4137.238mil|Location2.X=4138.762mil|Location1.Y=2329.724mil|Location2.Y=2331.248mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4137.238mil|Location2.X=4138.762mil|Location1.Y=2329.724mil|Location2.Y=2331.248mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad R12-2(62.15mm,20.1mm) on Top Layer And Text "R12" (61.905mm,19.695mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2294.115mil|Location2.X=2295.64mil|Location1.Y=1825.598mil|Location2.Y=1827.122mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2294.115mil|Location2.X=2295.64mil|Location1.Y=1825.598mil|Location2.Y=1827.122mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad R13-1(15.25mm,7.3mm) on Top Layer And Text "R13" (13.49mm,6.89mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2233.14mil|Location2.X=2234.665mil|Location1.Y=1826.859mil|Location2.Y=1828.384mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2233.14mil|Location2.X=2234.665mil|Location1.Y=1826.859mil|Location2.Y=1828.384mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad R13-2(13.75mm,7.3mm) on Top Layer And Text "R13" (13.49mm,6.89mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4210.705mil|Location2.X=4212.23mil|Location1.Y=2262.724mil|Location2.Y=2264.248mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4210.705mil|Location2.X=4212.23mil|Location1.Y=2262.724mil|Location2.Y=2264.248mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad R14-1(63.65mm,18.4mm) on Top Layer And Text "R14" (61.905mm,17.993mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4137.238mil|Location2.X=4138.762mil|Location1.Y=2262.724mil|Location2.Y=2264.248mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4137.238mil|Location2.X=4138.762mil|Location1.Y=2262.724mil|Location2.Y=2264.248mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad R14-2(62.15mm,18.4mm) on Top Layer And Text "R14" (61.905mm,17.993mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2067.417mil|Location2.X=2068.942mil|Location1.Y=1902.781mil|Location2.Y=1904.306mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2067.417mil|Location2.X=2068.942mil|Location1.Y=1902.781mil|Location2.Y=1904.306mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad R16-1(9.8mm,9.35mm) on Top Layer And Text "R16" (8.799mm,9.698mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2083.16mil|Location2.X=2084.685mil|Location1.Y=1938.519mil|Location2.Y=1940.044mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2083.16mil|Location2.X=2084.685mil|Location1.Y=1938.519mil|Location2.Y=1940.044mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad R16-2(9.8mm,10.85mm) on Top Layer And Text "R16" (8.799mm,9.698mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2067.598mil|Location2.X=2069.123mil|Location1.Y=1796.482mil|Location2.Y=1798.006mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2067.598mil|Location2.X=2069.123mil|Location1.Y=1796.482mil|Location2.Y=1798.006mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad R17-1(9.8mm,6.65mm) on Top Layer And Text "R17" (8.803mm,7.009mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2083.341mil|Location2.X=2084.866mil|Location1.Y=1832.66mil|Location2.Y=1834.185mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2083.341mil|Location2.X=2084.866mil|Location1.Y=1832.66mil|Location2.Y=1834.185mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad R17-2(9.8mm,8.15mm) on Top Layer And Text "R17" (8.803mm,7.009mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2853.305mil|Location2.X=2854.83mil|Location1.Y=2433.725mil|Location2.Y=2435.25mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2853.305mil|Location2.X=2854.83mil|Location1.Y=2433.725mil|Location2.Y=2435.25mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad R18-1(29.5mm,22.7mm) on Top Layer And Text "R18" (29.243mm,22.304mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2914.28mil|Location2.X=2915.805mil|Location1.Y=2432.464mil|Location2.Y=2433.988mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2914.28mil|Location2.X=2915.805mil|Location1.Y=2432.464mil|Location2.Y=2433.988mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad R18-2(31mm,22.7mm) on Top Layer And Text "R18" (29.243mm,22.304mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2853.395mil|Location2.X=2854.92mil|Location1.Y=2369.724mil|Location2.Y=2371.248mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2853.395mil|Location2.X=2854.92mil|Location1.Y=2369.724mil|Location2.Y=2371.248mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad R19-1(29.55mm,21.1mm) on Top Layer And Text "R19" (29.296mm,20.711mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2911.119mil|Location2.X=2912.644mil|Location1.Y=2343.485mil|Location2.Y=2345.01mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2911.119mil|Location2.X=2912.644mil|Location1.Y=2343.485mil|Location2.Y=2345.01mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad R19-2(31.05mm,21.1mm) on Top Layer And Text "R19" (29.296mm,20.711mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3465.1mil|Location2.X=3466.625mil|Location1.Y=2448.046mil|Location2.Y=2449.571mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3465.1mil|Location2.X=3466.625mil|Location1.Y=2448.046mil|Location2.Y=2449.571mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad R2-1(44.95mm,23.2mm) on Top Layer And Text "C7" (43.5mm,22.7mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3663.261mil|Location2.X=3664.786mil|Location1.Y=2076.657mil|Location2.Y=2078.182mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3663.261mil|Location2.X=3664.786mil|Location1.Y=2076.657mil|Location2.Y=2078.182mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad R3-1(49.85mm,13.6mm) on Top Layer And Text "R10" (48.4mm,13.4mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3605.537mil|Location2.X=3607.062mil|Location1.Y=2055.176mil|Location2.Y=2056.701mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3605.537mil|Location2.X=3607.062mil|Location1.Y=2055.176mil|Location2.Y=2056.701mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad R3-2(48.35mm,13.6mm) on Top Layer And Text "R10" (48.4mm,13.4mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2028.206mil|Location2.X=2029.731mil|Location1.Y=2326.472mil|Location2.Y=2327.996mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2028.206mil|Location2.X=2029.731mil|Location1.Y=2326.472mil|Location2.Y=2327.996mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad R4-1(8.25mm,20mm) on Top Layer And Text "R4" (8.336mm,19.612mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2075.435mil|Location2.X=2076.96mil|Location1.Y=2326.472mil|Location2.Y=2327.996mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2075.435mil|Location2.X=2076.96mil|Location1.Y=2326.472mil|Location2.Y=2327.996mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad R4-2(9.75mm,20mm) on Top Layer And Text "R4" (8.336mm,19.612mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2174.722mil|Location2.X=2176.247mil|Location1.Y=2625.22mil|Location2.Y=2626.744mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2174.722mil|Location2.X=2176.247mil|Location1.Y=2625.22mil|Location2.Y=2626.744mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad R5-1(12.15mm,27.6mm) on Top Layer And Text "R5" (10.724mm,27.2mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2122.245mil|Location2.X=2123.77mil|Location1.Y=2625.22mil|Location2.Y=2626.744mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2122.245mil|Location2.X=2123.77mil|Location1.Y=2625.22mil|Location2.Y=2626.744mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad R5-2(10.65mm,27.6mm) on Top Layer And Text "R5" (10.724mm,27.2mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2012.033mil|Location2.X=2013.558mil|Location1.Y=2414.653mil|Location2.Y=2416.177mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2012.033mil|Location2.X=2013.558mil|Location1.Y=2414.653mil|Location2.Y=2416.177mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad R6-1(8.4mm,22.95mm) on Top Layer And Text "R6" (7.739mm,21.792mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2025.716mil|Location2.X=2027.241mil|Location1.Y=2379.159mil|Location2.Y=2380.684mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2025.716mil|Location2.X=2027.241mil|Location1.Y=2379.159mil|Location2.Y=2380.684mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad R6-2(8.4mm,21.45mm) on Top Layer And Text "R6" (7.739mm,21.792mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2398.671mil|Location2.X=2400.195mil|Location1.Y=2022.456mil|Location2.Y=2023.981mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2398.671mil|Location2.X=2400.195mil|Location1.Y=2022.456mil|Location2.Y=2023.981mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad R8-1(17.65mm,12.3mm) on Top Layer And Text "R8" (17.746mm,11.89mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2445.899mil|Location2.X=2447.424mil|Location1.Y=2022.456mil|Location2.Y=2023.981mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2445.899mil|Location2.X=2447.424mil|Location1.Y=2022.456mil|Location2.Y=2023.981mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad R8-2(19.15mm,12.3mm) on Top Layer And Text "R8" (17.746mm,11.89mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2300.238mil|Location2.X=2301.762mil|Location1.Y=2022.85mil|Location2.Y=2024.374mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2300.238mil|Location2.X=2301.762mil|Location1.Y=2022.85mil|Location2.Y=2024.374mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad R9-1(15.15mm,12.3mm) on Top Layer And Text "R9" (15.245mm,11.9mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2347.466mil|Location2.X=2348.991mil|Location1.Y=1991.364mil|Location2.Y=1992.888mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2347.466mil|Location2.X=2348.991mil|Location1.Y=1991.364mil|Location2.Y=1992.888mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad R9-2(16.65mm,12.3mm) on Top Layer And Text "R9" (15.245mm,11.9mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3273.264mil|Location2.X=3274.788mil|Location1.Y=2310.261mil|Location2.Y=2311.786mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3273.264mil|Location2.X=3274.788mil|Location1.Y=2310.261mil|Location2.Y=2311.786mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad U1-25(40.05mm,19.325mm) on Top Layer And Text "C2" (40.7mm,20mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3252.932mil|Location2.X=3254.457mil|Location1.Y=2310.261mil|Location2.Y=2311.786mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3252.932mil|Location2.X=3254.457mil|Location1.Y=2310.261mil|Location2.Y=2311.786mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad U1-26(39.55mm,19.325mm) on Top Layer And Text "C2" (40.7mm,20mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2987.416mil|Location2.X=2988.941mil|Location1.Y=2223.652mil|Location2.Y=2225.177mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2987.416mil|Location2.X=2988.941mil|Location1.Y=2223.652mil|Location2.Y=2225.177mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad U1-37(33.075mm,17.85mm) on Top Layer And Text "C6" (31.9mm,18.2mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2975.714mil|Location2.X=2977.239mil|Location1.Y=2203.869mil|Location2.Y=2205.393mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2975.714mil|Location2.X=2977.239mil|Location1.Y=2203.869mil|Location2.Y=2205.393mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad U1-38(33.075mm,17.35mm) on Top Layer And Text "C6" (31.9mm,18.2mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2987.416mil|Location2.X=2988.941mil|Location1.Y=2186.919mil|Location2.Y=2188.443mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2987.416mil|Location2.X=2988.941mil|Location1.Y=2186.919mil|Location2.Y=2188.443mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad U1-39(33.075mm,16.85mm) on Top Layer And Text "C6" (31.9mm,18.2mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2224.58mil|Location2.X=2226.105mil|Location1.Y=1902.949mil|Location2.Y=1904.474mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2224.58mil|Location2.X=2226.105mil|Location1.Y=1902.949mil|Location2.Y=1904.474mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad U4-2(13.8mm,9.8mm) on Top Layer And Text "U4" (11.931mm,9.254mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4307.238mil|Location2.X=4308.762mil|Location1.Y=2288.724mil|Location2.Y=2290.248mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4307.238mil|Location2.X=4308.762mil|Location1.Y=2288.724mil|Location2.Y=2290.248mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.02mm) Between Pad U5-9(66.88mm,19.05mm) on Top Layer And Text "U5" (66.223mm,18.653mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+</table></a><hr color="#EEEEEE"><a href="#top" style="font-size: 0.9em">Back to top</a><br><br><a name="IDW1SWA2EJQGARIBFXIYLSZD1YKKM5WAETN2ATTK4RRELPY03SFVC"><table>
+<tr>
+<th style="text-align : left" colspan="1" class="rule">Silk to Silk (Clearance=0.02mm) (All),(All)</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2243.076mil|Location2.X=2245.113mil|Location1.Y=1827.712mil|Location2.Y=1829.75mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2243.076mil|Location2.X=2245.113mil|Location1.Y=1827.712mil|Location2.Y=1829.75mil|Absolute=True">Silk To Silk Clearance Constraint: (0mm &lt; 0.02mm) Between Arc (13.8mm,8mm) on Top Overlay And Text "R13" (13.49mm,6.89mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3347.005mil|Location2.X=3348.53mil|Location1.Y=1883.096mil|Location2.Y=1884.621mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3347.005mil|Location2.X=3348.53mil|Location1.Y=1883.096mil|Location2.Y=1884.621mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.02mm) Between Text "C3" (41.7mm,9.2mm) on Top Overlay And Track (38.48mm,9.1mm)(44.84mm,9.1mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2336.828mil|Location2.X=2338.353mil|Location1.Y=1895.891mil|Location2.Y=1897.416mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2336.828mil|Location2.X=2338.353mil|Location1.Y=1895.891mil|Location2.Y=1897.416mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.02mm) Between Text "D4" (15mm,9.4mm) on Top Overlay And Track (16.15mm,9.475mm)(16.15mm,10.125mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2812.23mil|Location2.X=2813.755mil|Location1.Y=1963.804mil|Location2.Y=1965.329mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2812.23mil|Location2.X=2813.755mil|Location1.Y=1963.804mil|Location2.Y=1965.329mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.02mm) Between Text "R1" (28.3mm,11.2mm) on Top Overlay And Track (28.2mm,8.75mm)(28.2mm,12.45mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3628.207mil|Location2.X=3629.732mil|Location1.Y=2075.342mil|Location2.Y=2076.867mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3628.207mil|Location2.X=3629.732mil|Location1.Y=2075.342mil|Location2.Y=2076.867mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.02mm) Between Text "R10" (48.4mm,13.4mm) on Top Overlay And Track (49.05mm,13.975mm)(49.15mm,13.975mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4174.435mil|Location2.X=4175.959mil|Location1.Y=2298.049mil|Location2.Y=2299.573mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4174.435mil|Location2.X=4175.959mil|Location1.Y=2298.049mil|Location2.Y=2299.573mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.02mm) Between Text "R12" (61.905mm,19.695mm) on Top Overlay And Track (62.85mm,19.725mm)(62.95mm,19.725mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4173.415mil|Location2.X=4174.94mil|Location1.Y=2328.962mil|Location2.Y=2330.487mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4173.415mil|Location2.X=4174.94mil|Location1.Y=2328.962mil|Location2.Y=2330.487mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.02mm) Between Text "R12" (61.905mm,19.695mm) on Top Overlay And Track (62.85mm,20.475mm)(62.95mm,20.475mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2268.923mil|Location2.X=2270.447mil|Location1.Y=1794.017mil|Location2.Y=1795.542mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2268.923mil|Location2.X=2270.447mil|Location1.Y=1794.017mil|Location2.Y=1795.542mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.02mm) Between Text "R13" (13.49mm,6.89mm) on Top Overlay And Track (14.45mm,6.925mm)(14.55mm,6.925mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2267.612mil|Location2.X=2269.137mil|Location1.Y=1825.025mil|Location2.Y=1826.55mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2267.612mil|Location2.X=2269.137mil|Location1.Y=1825.025mil|Location2.Y=1826.55mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.02mm) Between Text "R13" (13.49mm,6.89mm) on Top Overlay And Track (14.45mm,7.675mm)(14.55mm,7.675mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4174.435mil|Location2.X=4175.959mil|Location1.Y=2231.084mil|Location2.Y=2232.609mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4174.435mil|Location2.X=4175.959mil|Location1.Y=2231.084mil|Location2.Y=2232.609mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.02mm) Between Text "R14" (61.905mm,17.993mm) on Top Overlay And Track (62.85mm,18.025mm)(62.95mm,18.025mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4173.415mil|Location2.X=4174.94mil|Location1.Y=2262.033mil|Location2.Y=2263.558mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4173.415mil|Location2.X=4174.94mil|Location1.Y=2262.033mil|Location2.Y=2263.558mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.02mm) Between Text "R14" (61.905mm,17.993mm) on Top Overlay And Track (62.85mm,18.775mm)(62.95mm,18.775mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2103.171mil|Location2.X=2104.695mil|Location1.Y=1920.414mil|Location2.Y=1921.938mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2103.171mil|Location2.X=2104.695mil|Location1.Y=1920.414mil|Location2.Y=1921.938mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.02mm) Between Text "R16" (8.799mm,9.698mm) on Top Overlay And Track (10.175mm,10.05mm)(10.175mm,10.15mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2068.465mil|Location2.X=2069.99mil|Location1.Y=1920.414mil|Location2.Y=1921.938mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2068.465mil|Location2.X=2069.99mil|Location1.Y=1920.414mil|Location2.Y=1921.938mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.02mm) Between Text "R16" (8.799mm,9.698mm) on Top Overlay And Track (9.425mm,10.05mm)(9.425mm,10.15mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2068.556mil|Location2.X=2070.081mil|Location1.Y=1814.555mil|Location2.Y=1816.08mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2068.556mil|Location2.X=2070.081mil|Location1.Y=1814.555mil|Location2.Y=1816.08mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.02mm) Between Text "R17" (8.803mm,7.009mm) on Top Overlay And Track (9.425mm,7.35mm)(9.425mm,7.45mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2889.001mil|Location2.X=2890.526mil|Location1.Y=2400.6mil|Location2.Y=2402.125mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2889.001mil|Location2.X=2890.526mil|Location1.Y=2400.6mil|Location2.Y=2402.125mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.02mm) Between Text "R18" (29.243mm,22.304mm) on Top Overlay And Track (30.2mm,22.325mm)(30.3mm,22.325mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2887.734mil|Location2.X=2889.259mil|Location1.Y=2431.324mil|Location2.Y=2432.849mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2887.734mil|Location2.X=2889.259mil|Location1.Y=2431.324mil|Location2.Y=2432.849mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.02mm) Between Text "R18" (29.243mm,22.304mm) on Top Overlay And Track (30.2mm,23.075mm)(30.3mm,23.075mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2890.97mil|Location2.X=2892.495mil|Location1.Y=2337.734mil|Location2.Y=2339.258mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2890.97mil|Location2.X=2892.495mil|Location1.Y=2337.734mil|Location2.Y=2339.258mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.02mm) Between Text "R19" (29.296mm,20.711mm) on Top Overlay And Track (30.25mm,20.725mm)(30.35mm,20.725mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2889.762mil|Location2.X=2891.287mil|Location1.Y=2368.332mil|Location2.Y=2369.857mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2889.762mil|Location2.X=2891.287mil|Location1.Y=2368.332mil|Location2.Y=2369.857mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.02mm) Between Text "R19" (29.296mm,20.711mm) on Top Overlay And Track (30.25mm,21.475mm)(30.35mm,21.475mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2050.015mil|Location2.X=2051.539mil|Location1.Y=2295.117mil|Location2.Y=2296.642mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2050.015mil|Location2.X=2051.539mil|Location1.Y=2295.117mil|Location2.Y=2296.642mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.02mm) Between Text "R4" (8.336mm,19.612mm) on Top Overlay And Track (8.95mm,19.625mm)(9.05mm,19.625mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2050.083mil|Location2.X=2051.607mil|Location1.Y=2322.72mil|Location2.Y=2324.245mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2050.083mil|Location2.X=2051.607mil|Location1.Y=2322.72mil|Location2.Y=2324.245mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.02mm) Between Text "R4" (8.336mm,19.612mm) on Top Overlay And Track (8.95mm,20.375mm)(9.05mm,20.375mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2144.295mil|Location2.X=2145.82mil|Location1.Y=2594.018mil|Location2.Y=2595.543mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2144.295mil|Location2.X=2145.82mil|Location1.Y=2594.018mil|Location2.Y=2595.543mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.02mm) Between Text "R5" (10.724mm,27.2mm) on Top Overlay And Track (11.35mm,27.225mm)(11.45mm,27.225mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2144.342mil|Location2.X=2145.867mil|Location1.Y=2621.704mil|Location2.Y=2623.229mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2144.342mil|Location2.X=2145.867mil|Location1.Y=2621.704mil|Location2.Y=2623.229mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.02mm) Between Text "R5" (10.724mm,27.2mm) on Top Overlay And Track (11.35mm,27.975mm)(11.45mm,27.975mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2018.834mil|Location2.X=2020.359mil|Location1.Y=2392.611mil|Location2.Y=2394.135mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2018.834mil|Location2.X=2020.359mil|Location1.Y=2392.611mil|Location2.Y=2394.135mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.02mm) Between Text "R6" (7.739mm,21.792mm) on Top Overlay And Track (8.025mm,22.15mm)(8.025mm,22.25mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2043.193mil|Location2.X=2044.718mil|Location1.Y=2401.148mil|Location2.Y=2402.673mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2043.193mil|Location2.X=2044.718mil|Location1.Y=2401.148mil|Location2.Y=2402.673mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.02mm) Between Text "R6" (7.739mm,21.792mm) on Top Overlay And Track (8.775mm,22.15mm)(8.775mm,22.25mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3626.072mil|Location2.X=3627.596mil|Location1.Y=2128.175mil|Location2.Y=2129.699mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3626.072mil|Location2.X=3627.596mil|Location1.Y=2128.175mil|Location2.Y=2129.699mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.02mm) Between Text "R7" (48.35mm,14.9mm) on Top Overlay And Track (49mm,15.375mm)(49.1mm,15.375mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2420.357mil|Location2.X=2421.882mil|Location1.Y=1991.312mil|Location2.Y=1992.836mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2420.357mil|Location2.X=2421.882mil|Location1.Y=1991.312mil|Location2.Y=1992.836mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.02mm) Between Text "R8" (17.746mm,11.89mm) on Top Overlay And Track (18.35mm,11.925mm)(18.45mm,11.925mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2420.041mil|Location2.X=2421.566mil|Location1.Y=2019.451mil|Location2.Y=2020.975mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2420.041mil|Location2.X=2421.566mil|Location1.Y=2019.451mil|Location2.Y=2020.975mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.02mm) Between Text "R8" (17.746mm,11.89mm) on Top Overlay And Track (18.35mm,12.675mm)(18.45mm,12.675mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2321.891mil|Location2.X=2323.416mil|Location1.Y=1991.596mil|Location2.Y=1993.12mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2321.891mil|Location2.X=2323.416mil|Location1.Y=1991.596mil|Location2.Y=1993.12mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.02mm) Between Text "R9" (15.245mm,11.9mm) on Top Overlay And Track (15.85mm,11.925mm)(15.95mm,11.925mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2321.713mil|Location2.X=2323.237mil|Location1.Y=2019.547mil|Location2.Y=2021.072mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2321.713mil|Location2.X=2323.237mil|Location1.Y=2019.547mil|Location2.Y=2021.072mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.02mm) Between Text "R9" (15.245mm,11.9mm) on Top Overlay And Track (15.85mm,12.675mm)(15.95mm,12.675mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2184.277mil|Location2.X=2185.802mil|Location1.Y=1887.206mil|Location2.Y=1888.731mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2184.277mil|Location2.X=2185.802mil|Location1.Y=1887.206mil|Location2.Y=1888.731mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.02mm) Between Text "U4" (11.931mm,9.254mm) on Top Overlay And Track (12.3mm,8.3mm)(12.3mm,11.3mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2207.899mil|Location2.X=2209.424mil|Location1.Y=1909.621mil|Location2.Y=1911.146mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD_GPS_2\RFM232_V08_USB.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2207.899mil|Location2.X=2209.424mil|Location1.Y=1909.621mil|Location2.Y=1911.146mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.02mm) Between Text "U4" (11.931mm,9.254mm) on Top Overlay And Track (12.9mm,8.3mm)(12.9mm,11.3mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+</table></a><hr color="#EEEEEE"><a href="#top" style="font-size: 0.9em">Back to top</a><br><br></body>
+</html>

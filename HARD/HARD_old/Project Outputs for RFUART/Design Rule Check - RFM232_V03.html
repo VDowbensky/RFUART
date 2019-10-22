@@ -1,0 +1,406 @@
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html">
+<style type="text/css">
+		h1, h2, h3, h4, h5, h6 {
+			font-family : segoe ui;
+			color : black;
+			background-color : #EDE7D9;
+			padding: 0.3em;
+		}
+
+		h1 {
+			font-size: 1.2em;
+		}		
+
+		h2 {
+			font-size: 1.2em;
+		}
+
+		body {
+			font-family : segoe ui;
+		}
+
+		td, th {
+			padding: 0.5em;
+			text-align : left;
+			width: 10em;
+		}
+		th {
+			background-color : #EEEEEE;
+
+		}
+		th.column1, td.column1 {
+			text-align: left;
+			width : auto;
+		}
+		table {
+			width : 100%;
+			font-size: 0.9em;
+		}
+
+		.DRC_summary_header {
+			padding-bottom : 0.1em;
+			border : 0px solid black;
+			width: 100%;
+			align: left;
+		}
+
+		.DRC_summary_header_col1,
+		.DRC_summary_header_col2, 
+		.DRC_summary_header_col3 {
+			color : black;
+			font-size:100%;
+			padding : 0em;
+			padding-top : 0.2em;
+			padding-bottom 0.2em;
+			border : 0px solid black;
+			vertical-align: top;
+			text-align: left;
+		}
+
+		.DRC_summary_header_col1 {
+			font-weight: bold;
+			width: 8em;
+		}
+
+		.DRC_summary_header_col2 {
+			width: 0.1em;
+		
+		}
+
+		.DRC_summary_header_col3 {
+			width : auto;
+		}
+
+		.header_holder {
+		    Width = 100%;
+		    border = 0px solid green;
+		    padding = 0;
+		}
+
+
+		.front_matter, .front_matter_column1, .front_matter_column2, .front_matter_column3
+		{
+			left : 0;
+			top : 0;
+			padding: 0em;
+			padding-top : 0.1em;
+			border : 0px solid black;
+			width : 100%;
+			vertical-align: top;
+			text-align: left;
+		}
+
+		.front_matter_column1 {
+			width : 8em;
+			font-weight: bold;
+		}
+
+		.front_matter_column2 {
+			width: 0.1em;
+		}
+
+		.front_matter_column3 {
+			width : auto;
+		}
+
+		.total_column1, .total_column {
+			font-weight : bold;
+		}
+		.total_column1 {
+			text-align : left;
+		}
+		.warning, .error {
+			color : red;
+			font-weight : bold;
+		}
+		tr.onmouseout_odd {
+			background-color : #white;
+		}
+		tr.onmouseout_even { 
+			background-color : #FAFAFA;
+		}
+		tr.onmouseover_odd, tr.onmouseover_even { 
+			background-color : #EEEEEE;
+		} 
+		a:link, a:visited, .q a:link,.q a:active,.q {
+			color: #21489e; 
+		}
+		a:link.callback, a:visited.callback { 
+			color: #21489e;
+		}
+		a:link.customize, a:visited.customize {
+			color: #C0C0C0;
+			position: absolute; 
+			right: 10px;
+		}	
+		p.contents_level1 {
+			font-weight : bold;
+			font-size : 110%;
+			margin : 0.5em;
+		}
+		p.contents_level2 {
+			position : relative;
+			left : 20px;
+			margin : 0.5em;
+		}
+	</style><script type="text/javascript">
+		function coordToMils(coord) {
+			var number = coord / 10000;
+			
+			if (number != number.toFixed(3))
+				number = number.toFixed(3);
+
+			return number + 'mil'
+		}
+
+		function coordToMM(coord) {
+			var number = 0.0254 * coord / 10000;
+			
+			if (number != number.toFixed(4))
+				number = number.toFixed(4);
+			
+			return number + 'mm'
+		}
+	
+		function convertCoord(coordNode, units) {
+			for (var i = 0; i < coordNode.childNodes.length; i++) {
+				coordNode.removeChild(coordNode.childNodes[i]);
+			}
+
+			var coord = coordNode.getAttribute('value');
+			if (coord != null) {
+				if (units == 'mm') {
+					textNode = document.createTextNode(coordToMM(coord));
+					coordNode.appendChild(textNode);
+				} else if (units == 'mil') {
+					textNode = document.createTextNode(coordToMils(coord));		
+					coordNode.appendChild(textNode);	
+				}
+			}
+		}
+	
+		function convertUnits(unitNode, units) {
+			for (var i = 0; i < unitNode.childNodes.length; i++) {
+				unitNode.removeChild(unitNode.childNodes[i]);		
+			}
+		
+			textNode = document.createTextNode(units); 
+			unitNode.appendChild(textNode);
+		}
+	
+		function changeUnits(radio_input, units) {
+			if (radio_input.checked) {
+			
+				var elements = document.getElementsByName('coordinate');
+				if (elements) {
+					for (var i = 0; i < elements.length; i++) {
+						convertCoord(elements[i], units);
+					}
+				}
+	
+				var elements = document.getElementsByName('units');
+				if (elements) {
+					for (var i = 0; i < elements.length; i++) {
+						convertUnits(elements[i], units);
+					}
+				}
+			}
+		}
+	</script><title>Design Rule Verification Report</title>
+</head>
+<body onload=""><img ALT="Altium" src="
+			file://C:\Users\Public\Documents\Altium\AD18\Templates\AD_logo.png
+		"><h1>Design Rule Verification Report</h1>
+<table class="header_holder">
+<td class="column1">
+<table class="front_matter">
+<tr class="front_matter">
+<td class="front_matter_column1">Date:</td>
+<td class="front_matter_column2"></td>
+<td class="front_matter_column3">18.09.2018</td>
+</tr>
+<tr class="front_matter">
+<td class="front_matter_column1">Time:</td>
+<td class="front_matter_column2"></td>
+<td class="front_matter_column3">10:43:29</td>
+</tr>
+<tr class="front_matter">
+<td class="front_matter_column1">Elapsed Time:</td>
+<td class="front_matter_column2"></td>
+<td class="front_matter_column3">00:00:00</td>
+</tr>
+<tr class="front_matter">
+<td class="front_matter_column1">Filename:</td>
+<td class="front_matter_column2"></td>
+<td class="front_matter_column3"><a href="file:///D:\Projects\Lab equipment\RFUART\HARD\RFM232_V03.PcbDoc" class="file"><acronym title="D:\Projects\Lab equipment\RFUART\HARD\RFM232_V03.PcbDoc">D:\Projects\Lab equipment\RFUART\HARD\RFM232_V03.PcbDoc</acronym></a></td>
+</tr>
+</table>
+</td>
+<td class="column2">
+<table class="DRC_summary_header">
+<tr>
+<td class="DRC_summary_header_col1">Warnings:</td>
+<td class="DRC_summary_header_col2"></td>
+<td class="DRC_summary_header_col3">0</td></tr>
+<tr>
+<td class="DRC_summary_header_col1">Rule Violations:</td>
+<td class="DRC_summary_header_col2"></td>
+<td class="DRC_summary_header_col3" style="color : red">18</td></tr>
+</table>
+</td>
+</table><a name="IDM0PPQQVFFE3ZMSJNI03JV4ZXUL0PC3BNWQJMO3NMRABMQG3A3DWH"><h2>Summary</h2></a><table>
+<tr>
+<th class="column1">Warnings</th>
+<th class="column2">Count</th>
+</tr>
+<tr>
+<td style="font-weight : bold; text-align : right" class="column1">Total</td>
+<td style="font-weight : bold" class="column2">0</td>
+</tr>
+</table><br><table>
+<tr>
+<th class="column1">Rule Violations</th>
+<th class="column2">Count</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDBNYK0CNPKPIUJYGWRCMX5NCIIB4T04ESZKFRDFP5TTNNREQGN45B">Clearance Constraint (Gap=0.25mm) (InNamedPolygon('GND_B')),(InNet('NetJP3_2'))</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDWFCJPPZQCJXNJO0TAYKFCTDW3HV4JP3N0K0QRYBRNLRTEFEAHAHL">Clearance Constraint (Gap=0.25mm) (InNamedPolygon('GND-T1') Or  InNamedPolygon('GND-B1')),(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDSRFXELJZ5NOEBHSYHD1XXQLHDOUAXYZC4MNE5041R4RLBAQOQV">Clearance Constraint (Gap=0.254mm) (InNamedPolygon('GND_B')),(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDL0T0JP05T5IVL4MS4U3R2ENGBMOHBTYGJLAUEKJVAC3SK0V5WTOH">Clearance Constraint (Gap=0.15mm) (All),(InComponent('U1'))</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#ID50K2BE4U33FVNNPU1MCCY0UIDW4ZEM33IPC5NODEHRG3EHTDQ5">Clearance Constraint (Gap=0.35mm) (InNamedPolygon('GND_RF')),(InComponent('R3'))</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDJHXBALCZ2NEUPLKU5EGK5ZBKRJYZVLXIE2TBO3GTMXVLUA2MYYEL">Clearance Constraint (Gap=0.2mm) (All),(All)</a></td>
+<td class="column2">8</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDBIR3VBUG5ANWLWCP4CF1ZADZ2HZBD2EDTXEHEPHLZAZPQQ4SPFBP">Short-Circuit Constraint (Allowed=No) (All),(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDUXLYNVM4BHBKLQLCO0QCE0LXPOJKWSJ3RFKGXHG5FH0UFPSKSVZJ">Un-Routed Net Constraint ( (All) )</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDTJSFVHWZUGHZKAPDEBSHMFPENJXLUK4S0MHRGZKJ45CH0V3H2M2">Modified Polygon (Allow modified: No), (Allow shelved: No)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#ID3IARU5S2W011FEADPD4WLT50ALQKA0GLQXY1Y3ITANIHRMNLRVUJ">Width Constraint (Min=0.2mm) (Max=2mm) (Preferred=0.3mm) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#ID3FRP5VAGUQV4IUFHZ1LQVM3WAKIC4ZTOUAFBBPO5SYAFIMS2MTMN">Power Plane Connect Rule(Relief Connect )(Expansion=0.508mm) (Conductor Width=0.254mm) (Air Gap=0.254mm) (Entries=4) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDKS2AJC4VLOEMFZDQVRKMYLOWMIU3HMOCXTUVIKKXU4VFFQ1QWIFO">Hole Size Constraint (Min=0.025mm) (Max=2.54mm) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDJMHNEQAKDX01ULN5FARU5KJPJPPBVPFHLCW4L5DWGJC4DQESBJ">Hole To Hole Clearance (Gap=0.254mm) (All),(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDLRJANWAGGH3NGXEH53YUQI2MBDDIJK25BNFBSTHTCB2TL5D34ETI">Minimum Solder Mask Sliver (Gap=0.02mm) (All),(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDJ20HFBCQRGQKK0FYH4T4WOR12EXICLVDMITVL0BCXHIYAD422IL">Silk To Solder Mask (Clearance=0mm) (IsPad),(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDYVHTIT3M5DDTE0SBXHHAZ0CUJK4KCL5J00KD0WBUV31YJT21IRZI">Silk to Silk (Clearance=0.02mm) (All),(All)</a></td>
+<td class="column2">10</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDU0KHDPN5D4M3KTU2GS4WLSFZWLOFC1D4KUW3V0EV1PRWEXFX0IBI">Net Antennae (Tolerance=0mm) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDBWLXEBBGUVV33QMJCQBUZQH4FWDL0YZMUALAPIO2O5RGTYVXTOJ">Height Constraint (Min=0mm) (Max=25.4mm) (Prefered=12.7mm) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr>
+<td style="font-weight : bold; text-align : right" class="column1">Total</td>
+<td style="font-weight : bold" class="column2">18</td>
+</tr>
+</table><br><a name="IDJHXBALCZ2NEUPLKU5EGK5ZBKRJYZVLXIE2TBO3GTMXVLUA2MYYEL"><table>
+<tr>
+<th style="text-align : left" colspan="1" class="rule">Clearance Constraint (Gap=0.2mm) (All),(All)</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD\RFM232_V03.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1426.009mil|Location2.X=1432.258mil|Location1.Y=2898.45mil|Location2.Y=2904.699mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD\RFM232_V03.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1426.009mil|Location2.X=1432.258mil|Location1.Y=2898.45mil|Location2.Y=2904.699mil|Absolute=True">Clearance Constraint: (Collision &lt; 0.2mm) Between Pad Free-2(-2.5mm,-2.5mm) on Multi-Layer And Track (-2.5mm,-5mm)(-2.5mm,0mm) on Keep-Out Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD\RFM232_V03.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1426.009mil|Location2.X=1432.258mil|Location1.Y=2898.45mil|Location2.Y=2904.699mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD\RFM232_V03.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1426.009mil|Location2.X=1432.258mil|Location1.Y=2898.45mil|Location2.Y=2904.699mil|Absolute=True">Clearance Constraint: (Collision &lt; 0.2mm) Between Pad Free-2(-2.5mm,-2.5mm) on Multi-Layer And Track (-5mm,-2.5mm)(0mm,-2.5mm) on Keep-Out Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD\RFM232_V03.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4693.726mil|Location2.X=4699.975mil|Location1.Y=3803.962mil|Location2.Y=3810.211mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD\RFM232_V03.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4693.726mil|Location2.X=4699.975mil|Location1.Y=3803.962mil|Location2.Y=3810.211mil|Absolute=True">Clearance Constraint: (Collision &lt; 0.2mm) Between Pad Free-3(80.5mm,20.5mm) on Multi-Layer And Track (78mm,20.5mm)(83mm,20.5mm) on Keep-Out Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD\RFM232_V03.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4693.726mil|Location2.X=4699.975mil|Location1.Y=3803.962mil|Location2.Y=3810.211mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD\RFM232_V03.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4693.726mil|Location2.X=4699.975mil|Location1.Y=3803.962mil|Location2.Y=3810.211mil|Absolute=True">Clearance Constraint: (Collision &lt; 0.2mm) Between Pad Free-3(80.5mm,20.5mm) on Multi-Layer And Track (80.5mm,18mm)(80.5mm,23mm) on Keep-Out Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD\RFM232_V03.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1426.009mil|Location2.X=1432.258mil|Location1.Y=3803.962mil|Location2.Y=3810.211mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD\RFM232_V03.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1426.009mil|Location2.X=1432.258mil|Location1.Y=3803.962mil|Location2.Y=3810.211mil|Absolute=True">Clearance Constraint: (Collision &lt; 0.2mm) Between Pad Free-4(-2.5mm,20.5mm) on Multi-Layer And Track (-2.5mm,18mm)(-2.5mm,22.9mm) on Keep-Out Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD\RFM232_V03.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1426.009mil|Location2.X=1432.258mil|Location1.Y=3803.962mil|Location2.Y=3810.211mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD\RFM232_V03.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1426.009mil|Location2.X=1432.258mil|Location1.Y=3803.962mil|Location2.Y=3810.211mil|Absolute=True">Clearance Constraint: (Collision &lt; 0.2mm) Between Pad Free-4(-2.5mm,20.5mm) on Multi-Layer And Track (-5mm,20.5mm)(0mm,20.5mm) on Keep-Out Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD\RFM232_V03.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4693.726mil|Location2.X=4699.975mil|Location1.Y=2898.45mil|Location2.Y=2904.699mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD\RFM232_V03.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4693.726mil|Location2.X=4699.975mil|Location1.Y=2898.45mil|Location2.Y=2904.699mil|Absolute=True">Clearance Constraint: (Collision &lt; 0.2mm) Between Pad Free-5(80.5mm,-2.5mm) on Multi-Layer And Track (78mm,-2.5mm)(83mm,-2.5mm) on Keep-Out Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD\RFM232_V03.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4693.726mil|Location2.X=4699.975mil|Location1.Y=2898.45mil|Location2.Y=2904.699mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD\RFM232_V03.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=4693.726mil|Location2.X=4699.975mil|Location1.Y=2898.45mil|Location2.Y=2904.699mil|Absolute=True">Clearance Constraint: (Collision &lt; 0.2mm) Between Pad Free-5(80.5mm,-2.5mm) on Multi-Layer And Track (80.5mm,-5mm)(80.5mm,0mm) on Keep-Out Layer </acronym></a><br></td>
+</tr>
+</table></a><hr color="#EEEEEE"><a href="#top" style="font-size: 0.9em">Back to top</a><br><br><a name="IDYVHTIT3M5DDTE0SBXHHAZ0CUJK4KCL5J00KD0WBUV31YJT21IRZI"><table>
+<tr>
+<th style="text-align : left" colspan="1" class="rule">Silk to Silk (Clearance=0.02mm) (All),(All)</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD\RFM232_V03.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2383.692mil|Location2.X=2385.216mil|Location1.Y=3545.502mil|Location2.Y=3547.027mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD\RFM232_V03.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2383.692mil|Location2.X=2385.216mil|Location1.Y=3545.502mil|Location2.Y=3547.027mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.02mm) Between Text "D2" (22.165mm,14.7mm) on Top Overlay And Track (21.14mm,13.85mm)(21.79mm,13.85mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD\RFM232_V03.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2064.064mil|Location2.X=2065.588mil|Location1.Y=3081.905mil|Location2.Y=3083.429mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD\RFM232_V03.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2064.064mil|Location2.X=2065.588mil|Location1.Y=3081.905mil|Location2.Y=3083.429mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.02mm) Between Text "JP1" (13.1mm,1.3mm) on Top Overlay And Track (13.7mm,1.5mm)(13.7mm,5mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD\RFM232_V03.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2058.288mil|Location2.X=2059.812mil|Location1.Y=3055.798mil|Location2.Y=3057.323mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD\RFM232_V03.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2058.288mil|Location2.X=2059.812mil|Location1.Y=3055.798mil|Location2.Y=3057.323mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.02mm) Between Text "JP1" (13.1mm,1.3mm) on Top Overlay And Track (6.3mm,1.4mm)(13.7mm,1.4mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD\RFM232_V03.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2507.112mil|Location2.X=2508.636mil|Location1.Y=3138.115mil|Location2.Y=3139.64mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD\RFM232_V03.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2507.112mil|Location2.X=2508.636mil|Location1.Y=3138.115mil|Location2.Y=3139.64mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.02mm) Between Text "L1" (24.5mm,3.5mm) on Top Overlay And Track (24.9mm,3.49mm)(25.1mm,3.49mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD\RFM232_V03.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2485.78mil|Location2.X=2487.304mil|Location1.Y=3618.332mil|Location2.Y=3619.857mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD\RFM232_V03.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2485.78mil|Location2.X=2487.304mil|Location1.Y=3618.332mil|Location2.Y=3619.857mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.02mm) Between Text "R1" (23.85mm,15.7mm) on Top Overlay And Track (24.3mm,15.725mm)(24.4mm,15.725mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD\RFM232_V03.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2481.797mil|Location2.X=2483.322mil|Location1.Y=3648.695mil|Location2.Y=3650.22mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD\RFM232_V03.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2481.797mil|Location2.X=2483.322mil|Location1.Y=3648.695mil|Location2.Y=3650.22mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.02mm) Between Text "R1" (23.85mm,15.7mm) on Top Overlay And Track (24.3mm,16.475mm)(24.4mm,16.475mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD\RFM232_V03.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2482.173mil|Location2.X=2483.698mil|Location1.Y=3554.023mil|Location2.Y=3555.548mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD\RFM232_V03.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2482.173mil|Location2.X=2483.698mil|Location1.Y=3554.023mil|Location2.Y=3555.548mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.02mm) Between Text "R2" (23.75mm,14.1mm) on Top Overlay And Track (24.3mm,14.125mm)(24.4mm,14.125mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD\RFM232_V03.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2479.272mil|Location2.X=2480.797mil|Location1.Y=3585.563mil|Location2.Y=3587.087mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD\RFM232_V03.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=2479.272mil|Location2.X=2480.797mil|Location1.Y=3585.563mil|Location2.Y=3587.087mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.02mm) Between Text "R2" (23.75mm,14.1mm) on Top Overlay And Track (24.3mm,14.875mm)(24.4mm,14.875mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD\RFM232_V03.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3968.745mil|Location2.X=3970.27mil|Location1.Y=3133.115mil|Location2.Y=3134.64mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD\RFM232_V03.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3968.745mil|Location2.X=3970.27mil|Location1.Y=3133.115mil|Location2.Y=3134.64mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.02mm) Between Text "R3" (61.5mm,3.4mm) on Top Overlay And Track (62.05mm,3.425mm)(62.15mm,3.425mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD\RFM232_V03.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3965.983mil|Location2.X=3967.507mil|Location1.Y=3164.227mil|Location2.Y=3165.752mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=D:\Projects\Lab equipment\RFUART\HARD\RFM232_V03.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=3965.983mil|Location2.X=3967.507mil|Location1.Y=3164.227mil|Location2.Y=3165.752mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.02mm) Between Text "R3" (61.5mm,3.4mm) on Top Overlay And Track (62.05mm,4.175mm)(62.15mm,4.175mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+</table></a><hr color="#EEEEEE"><a href="#top" style="font-size: 0.9em">Back to top</a><br><br></body>
+</html>

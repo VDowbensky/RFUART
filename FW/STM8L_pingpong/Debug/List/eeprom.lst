@@ -1,0 +1,166 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V3.11.1.207 for STM8                 26/Jul/2019  14:50:12
+# Copyright 2010-2019 IAR Systems AB.
+# PC-locked license - IAR Embedded Workbench for STMicroelectronics STM8
+#
+#    Source file  =  
+#        D:\Projects\Lab
+#        equipment\RFUART\FW\pingpong\STM8L_pingpong\src\eeprom.c
+#    Command line =  
+#        -f C:\Users\Gemicle\AppData\Local\Temp\EWB31D.tmp ("D:\Projects\Lab
+#        equipment\RFUART\FW\pingpong\STM8L_pingpong\src\eeprom.c" -e -Ohz
+#        --debug --code_model medium --data_model medium -o "D:\Projects\Lab
+#        equipment\RFUART\FW\pingpong\STM8L_pingpong\Debug\Obj" --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.3\stm8\LIB\dlstm8mmn.h" -D STM8L15X_LD -lcN "D:\Projects\Lab
+#        equipment\RFUART\FW\pingpong\STM8L_pingpong\Debug\List" -lb
+#        "D:\Projects\Lab
+#        equipment\RFUART\FW\pingpong\STM8L_pingpong\Debug\List" -I
+#        "D:\Projects\Lab equipment\RFUART\FW\STM8L_IAR\" -I "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\src\" -I "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\inc\" -I "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\src\" -I
+#        "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\inc\"
+#        --require_prototypes --vregs 16)
+#    Locale       =  Russian_RUS.1251
+#    List file    =  
+#        D:\Projects\Lab
+#        equipment\RFUART\FW\pingpong\STM8L_pingpong\Debug\List\eeprom.lst
+#    Object file  =  
+#        D:\Projects\Lab
+#        equipment\RFUART\FW\pingpong\STM8L_pingpong\Debug\Obj\eeprom.o
+#
+###############################################################################
+
+D:\Projects\Lab equipment\RFUART\FW\pingpong\STM8L_pingpong\src\eeprom.c
+      1          #include "eeprom.h"
+      2          #pragma data_alignment=4
+      3          volatile __eeprom uint32_t F_Base = F_BASE; //4 - 0x00D90000
+      4          volatile __eeprom uint32_t F_Step = F_STEP; //8 - 0x000061A8
+      5          volatile __eeprom int32_t  F_Offset = F_OFFSET; //12
+      6          
+      7          volatile __eeprom uint32_t BitRate = WORK_BITRATE; //16
+      8          volatile __eeprom uint32_t Deviation = WORK_DEVIATION; //20
+      9          volatile __eeprom uint32_t PkCount = PACKET_COUNT; //24
+     10          
+     11          volatile __eeprom uint8_t Channel = WORK_CHANNEL; //33 - alignment - ??? 
+     12          //tx settings
+     13          volatile __eeprom uint8_t ModSetting = WORK_MOD_SETTING; //34
+     14          volatile __eeprom uint8_t TxPower = WORK_TXPOWER; //35
+     15          //rx settings
+     16          volatile __eeprom uint8_t RbwDcc = WORK_RBW_DCC; //36
+     17          volatile __eeprom uint8_t Rbw = WORK_RBW_BW; //37
+     18          volatile __eeprom uint8_t AfcDcc = WORK_AFC_DCC; //38
+     19          volatile __eeprom uint8_t Abw = WORK_AFC_BW; //39
+     20          volatile __eeprom uint8_t AfcSetting = WORK_AFCSETTING; //40
+     21          volatile __eeprom int8_t  LbOffset = WORK_LBOFFSET; //41 //should be int8_t
+     22          volatile __eeprom uint8_t RssiTr = WORK_RSSITR; //42
+     23          volatile __eeprom uint8_t Dagc = WORK_TESTDAGC; //43
+     24          volatile __eeprom uint8_t LnaSetting = WORK_LNASET; //44 - add LNA booster bit
+     25          
+     26          volatile __eeprom uint8_t SyncWord[8] = {WORK_SYNC1, WORK_SYNC2, WORK_SYNC3, WORK_SYNC4, WORK_SYNC5, WORK_SYNC6, WORK_SYNC7, WORK_SYNC8}; //32
+     27          volatile __eeprom uint8_t PkConfig1 = WORK_PACKETCONFIG1; //45
+     28          volatile __eeprom uint8_t PkConfig2 = WORK_PACKETCONFIG2; //46
+     29          
+     30          volatile __eeprom uint8_t NdAddr = 0; //47
+     31          
+     32          volatile __eeprom uint8_t PkDelay = PACKET_DELAY; //48
+     33          volatile __eeprom uint8_t PkLen = WORK_PACKET_LEN; //49
+     34          //timeouts
+     35          volatile __eeprom uint8_t RxTo = WORK_RXTO; //50
+     36          volatile __eeprom uint8_t RssiTo = WORK_RSSITO; //51
+     37          volatile __eeprom uint16_t RF69To = RF69TIMEOUT; //52
+     38          volatile __eeprom uint8_t RxDelay = WORK_RXDELAY; //53 - inter-packet RX delay
+     39          
+     40          //add temperature drift coeff. here!!!
+     41          volatile __eeprom int8_t Tcal = TCAL;
+     42          volatile __eeprom int8_t TcalValue = T_INIT;
+     43          volatile __eeprom int16_t Tslope = F_TSLOPE; 
+     44          
+     45          
+     46          
+     47          
+     48          
+     49          //functions
+     50          /*
+     51          void writepar8(uint8_t d, uint8_t s);
+     52          void writepars8(int8_t d, int8_t s);
+     53          void writepar32(uint32_t d, uint32_t s);
+     54          
+     55          
+     56          void writepar8(uint8_t d, uint8_t s)
+     57          {
+     58            FLASH_Unlock(FLASH_MemType_Data);
+     59            FLASH_WaitForLastOperation(FLASH_MemType_Data);
+     60            FLASH_EraseByte((uint32_t)&d);
+     61            FLASH_ProgramByte((uint32_t)&d, s);
+     62            FLASH_Lock(FLASH_MemType_Data);
+     63          }
+     64          
+     65          void writepars8(int8_t d, int8_t s)
+     66          {
+     67            FLASH_Unlock(FLASH_MemType_Data);
+     68            //d = s;
+     69            //FLASH_ProgramByte(d, s);
+     70            FLASH_WaitForLastOperation(FLASH_MemType_Data);
+     71            FLASH_Lock(FLASH_MemType_Data);
+     72          }
+     73          
+     74          void writepar32(uint32_t d, uint32_t s)
+     75          {
+     76            FLASH_Unlock(FLASH_MemType_Data);
+     77            //d = s;
+     78            //FLASH_ProgramWord(d, s);
+     79            FLASH_WaitForLastOperation(FLASH_MemType_Data);
+     80            FLASH_Lock(FLASH_MemType_Data);
+     81          }
+     82          */
+     83          
+     84          
+     85          
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       1  Abw
+       1  AfcDcc
+       1  AfcSetting
+       4  BitRate
+       1  Channel
+       1  Dagc
+       4  Deviation
+       4  F_Base
+       4  F_Offset
+       4  F_Step
+       1  LbOffset
+       1  LnaSetting
+       1  ModSetting
+       1  NdAddr
+       1  PkConfig1
+       1  PkConfig2
+       4  PkCount
+       1  PkDelay
+       1  PkLen
+       2  RF69To
+       1  Rbw
+       1  RbwDcc
+       1  RssiTo
+       1  RssiTr
+       1  RxDelay
+       1  RxTo
+       8  SyncWord
+       1  Tcal
+       1  TcalValue
+       2  Tslope
+       1  TxPower
+
+ 
+ 58 bytes in section .eeprom.data
+ 
+ 58 bytes of DATA memory
+
+Errors: none
+Warnings: none

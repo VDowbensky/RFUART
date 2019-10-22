@@ -1,0 +1,12 @@
+Output: NC Drill Files
+Type  : NC Drill
+From  : Project [GPSpart.PrjPCB]
+   Generated File[GPSpart.TXT]
+   Generated File[GPSpart.LDP]
+   Generated File[GPSpart.DRR]
+
+
+Files Generated   : 3
+Documents Printed : 0
+
+Finished Output Generation At 16:59:10 On 08.10.2018

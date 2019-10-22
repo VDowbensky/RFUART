@@ -1,0 +1,176 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V3.11.1.207 for STM8                 26/Jul/2019  14:50:18
+# Copyright 2010-2019 IAR Systems AB.
+# PC-locked license - IAR Embedded Workbench for STMicroelectronics STM8
+#
+#    Source file  =  
+#        D:\Projects\Lab
+#        equipment\RFUART\FW\pingpong\STM8L_pingpong\src\uart_interface.c
+#    Command line =  
+#        -f C:\Users\Gemicle\AppData\Local\Temp\EWC86F.tmp ("D:\Projects\Lab
+#        equipment\RFUART\FW\pingpong\STM8L_pingpong\src\uart_interface.c" -e
+#        -Ohz --debug --code_model medium --data_model medium -o
+#        "D:\Projects\Lab
+#        equipment\RFUART\FW\pingpong\STM8L_pingpong\Debug\Obj" --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.3\stm8\LIB\dlstm8mmn.h" -D STM8L15X_LD -lcN "D:\Projects\Lab
+#        equipment\RFUART\FW\pingpong\STM8L_pingpong\Debug\List" -lb
+#        "D:\Projects\Lab
+#        equipment\RFUART\FW\pingpong\STM8L_pingpong\Debug\List" -I
+#        "D:\Projects\Lab equipment\RFUART\FW\STM8L_IAR\" -I "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\src\" -I "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\inc\" -I "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\src\" -I
+#        "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\inc\"
+#        --require_prototypes --vregs 16)
+#    Locale       =  Russian_RUS.1251
+#    List file    =  
+#        D:\Projects\Lab
+#        equipment\RFUART\FW\pingpong\STM8L_pingpong\Debug\List\uart_interface.lst
+#    Object file  =  
+#        D:\Projects\Lab
+#        equipment\RFUART\FW\pingpong\STM8L_pingpong\Debug\Obj\uart_interface.o
+#
+###############################################################################
+
+D:\Projects\Lab equipment\RFUART\FW\pingpong\STM8L_pingpong\src\uart_interface.c
+      1          #include "uart_interface.h"
+      2          
+      3          void initUART(uint32_t b);
+      4          
+      5          void USART_SendBlock(uint8_t bl);
+      6          void DE_On(void);
+      7          void DE_Off(void);
+      8          void clearRXbuffer(void);
+      9          
+     10          void cbUSART1_TXirq(void);
+     11          void cbUSART1_RXirq(void);
+     12          
+     13          uint8_t TXbuffer[USART_TXBUFFERSIZE];
+     14          uint8_t RXbuffer[USART_RXBUFFERSIZE];  
+     15          
+     16          uint8_t TxCount;
+     17          uint8_t TxPointer;
+     18          //uint8_t TxBusy = 0;
+     19          volatile uint8_t RxPointer;
+     20          //uint8_t RxFlag;
+     21          
+     22          void initUART(uint32_t b)
+     23          {
+     24            DE_Off();
+     25            SYSCFG_REMAPDeInit();
+     26            SYSCFG_REMAPPinConfig(REMAP_Pin_USART1TxRxPortA, ENABLE);
+     27            USART_DeInit(USART1);
+     28            USART_Init(USART1, b, USART_WordLength_8b, USART_StopBits_1, USART_Parity_No, (USART_Mode_TypeDef)(USART_Mode_Rx | USART_Mode_Tx));
+     29            //interrupt
+     30            //USART_ITConfig(USART1, (USART_IT_TC | USART_IT_RXNE), ENABLE);
+     31            USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
+     32            USART_ITConfig(USART1, USART_IT_TC, ENABLE);
+     33            USART_Cmd(USART1, ENABLE);
+     34            
+     35          }
+     36          
+     37          void USART_SendBlock(uint8_t bl)
+     38          {
+     39            //while (TxBusy);
+     40            //USART_ITConfig(USART1, (USART_IT_TC), ENABLE);
+     41            TxPointer = 0;
+     42            TxCount = bl;
+     43            DE_On(); //switch driver to transmit
+     44            USART_SendData8(USART1, TXbuffer[0]);
+     45            //TxBusy = 1;
+     46          }
+     47          
+     48          void clearRXbuffer(void)
+     49          {
+     50            //uint8_t i;
+     51            //for(i=0; i<USART_RXBUFFERSIZE; i++) RXbuffer[i] = 0;
+     52            disableInterrupts();
+     53            RXbuffer[0] = 0;
+     54            RxPointer = 0;
+     55            enableInterrupts();
+     56          }
+     57          
+     58          void cbUSART1_TXirq(void)
+     59          {
+     60            //check interrupt source	
+     61            
+     62           
+     63             if(USART_GetFlagStatus(USART1, USART_FLAG_TC) == SET)
+     64          	 {
+     65                    USART_ClearITPendingBit(USART1, USART_IT_TC);
+     66          	 if (TxPointer < TxCount)  	// it's end?
+     67           		{
+     68          		TxPointer++;			// next byte
+     69          		USART_SendData8(USART1, TXbuffer[TxPointer]);
+     70          		}
+     71          	 else 
+     72          	 {
+     73          		TxCount=0;
+     74          		TxPointer=0;
+     75          		DE_Off();
+     76                          //USART_ITConfig(USART1, (USART_IT_TC), DISABLE);
+     77          		//TxBusy=0;//transmitter free
+     78          	 }
+     79           }
+     80          }
+     81          void cbUSART1_RXirq(void)
+     82          {
+     83            //add byte to buffer and set rx flsg
+     84            if(USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == SET)
+     85            {
+     86              uint8_t tmp;
+     87              //USART_ClearITPendingBit(USART1, USART_IT_RXNE);
+     88              tmp = USART_ReceiveData8(USART1);
+     89              RXbuffer[RxPointer] = tmp;
+     90             // if (tmp == 0x0A)
+     91             // {
+     92             //   GPSflag = 1;
+     93             // }
+     94             // else
+     95              {
+     96              RxPointer++;
+     97              if (RxPointer == USART_RXBUFFERSIZE) RxPointer = 0; // overrun ptotection - circle buffer
+     98              }
+     99            }
+    100          }
+    101          
+    102          void DE_On(void)
+    103          {
+    104              GPIO_WriteBit(DE_PORT, DE, SET);
+    105          }
+    106          
+    107          void DE_Off(void)
+    108          {
+    109              GPIO_WriteBit(DE_PORT, DE, RESET);  
+    110          }
+    111          
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      11  DE_Off
+      13  DE_On
+     128  RXbuffer
+       1  RxPointer
+     128  TXbuffer
+       1  TxCount
+       1  TxPointer
+      21  USART_SendBlock
+      52  cbUSART1_RXirq
+      65  cbUSART1_TXirq
+      11  clearRXbuffer
+      91  initUART
+
+ 
+ 264 bytes in section .far_func.text
+ 259 bytes in section .near.bss
+ 
+ 264 bytes of CODE memory
+ 259 bytes of DATA memory
+
+Errors: none
+Warnings: none

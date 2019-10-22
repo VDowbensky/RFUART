@@ -1,0 +1,80 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V3.10.1.201 for STM8                 17/Dec/2018  17:51:01
+# Copyright 2010-2017 IAR Systems AB.
+# PC-locked license - IAR Embedded Workbench for STMicroelectronics STM8
+#
+#    Source file  =  
+#        D:\Projects\Lab equipment\RFUART\FW\STM8L_IAR\src\spi_interface.c
+#    Command line =  
+#        -f C:\Users\Gemicle\AppData\Local\Temp\EW2524.tmp ("D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\src\spi_interface.c" -e -Ohz --debug
+#        --code_model medium --data_model medium -o "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\Release\Obj" --dlib_config "C:\Program
+#        Files (x86)\IAR Systems\Embedded Workbench 8.0\stm8\LIB\dlstm8mmn.h"
+#        -D STM8L15X_LD -lcN "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\Release\List" -lb "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\Release\List" -I "D:\Projects\Lab
+#        equipment\RFUART\FW\IAR\" -I "D:\Projects\Lab
+#        equipment\RFUART\FW\IAR\src\" -I "D:\Projects\Lab
+#        equipment\RFUART\FW\IAR\inc\" -I "D:\Projects\Lab
+#        equipment\RFUART\FW\IAR\STM8L15x_StdPeriph_Driver\src\" -I
+#        "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\" -I
+#        "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\inc\" -I
+#        "D:\Projects\Lab equipment\RFUART\FW\STM8L_IAR\inc\"
+#        --require_prototypes --vregs 16)
+#    Locale       =  Russian_RUS.1251
+#    List file    =  
+#        D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\Release\List\spi_interface.lst
+#    Object file  =  
+#        D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\Release\Obj\spi_interface.o
+#
+###############################################################################
+
+D:\Projects\Lab equipment\RFUART\FW\STM8L_IAR\src\spi_interface.c
+      1          #include "spi_interface.h"
+      2          
+      3          void initSPI(void);
+      4          uint8_t spi_transfer(uint8_t b);
+      5          
+      6          
+      7          void initSPI(void)
+      8            {
+      9              SPI_DeInit(SPI1);
+     10              SPI_Init(SPI1, SPI_FirstBit_MSB, SPI_BaudRatePrescaler_16, SPI_Mode_Master, SPI_CPOL_Low, SPI_CPHA_1Edge, SPI_Direction_Tx, SPI_NSS_Soft, 0);
+     11              SPI_Cmd(SPI1, ENABLE);
+     12              //interrupt
+     13              //SPI_ITConfig(SPI1, SPI_IT_TXE | SPI_IT_RXNE, ENABLE);
+     14              
+     15            }
+     16          
+     17          uint8_t spi_transfer(uint8_t b)
+     18          {
+     19            uint8_t data;
+     20            while (SPI_GetFlagStatus(SPI1, SPI_FLAG_TXE) == RESET);
+     21            SPI_SendData(SPI1, b);
+     22            while (SPI_GetFlagStatus(SPI1, SPI_FLAG_RXNE) == RESET);
+     23            data = SPI_ReceiveData(SPI1);
+     24            while (SPI_GetFlagStatus(SPI1, SPI_FLAG_BSY) == SET);
+     25            return data;
+     26          }
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       7  ?Subroutine0
+      46  initSPI
+      58  spi_transfer
+
+ 
+ 111 bytes in section .far_func.text
+ 
+ 111 bytes of CODE memory
+
+Errors: none
+Warnings: 1

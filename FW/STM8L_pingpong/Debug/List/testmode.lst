@@ -1,0 +1,313 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V3.11.1.207 for STM8                 26/Jul/2019  14:50:17
+# Copyright 2010-2019 IAR Systems AB.
+# PC-locked license - IAR Embedded Workbench for STMicroelectronics STM8
+#
+#    Source file  =  
+#        D:\Projects\Lab
+#        equipment\RFUART\FW\pingpong\STM8L_pingpong\src\testmode.c
+#    Command line =  
+#        -f C:\Users\Gemicle\AppData\Local\Temp\EWC783.tmp ("D:\Projects\Lab
+#        equipment\RFUART\FW\pingpong\STM8L_pingpong\src\testmode.c" -e -Ohz
+#        --debug --code_model medium --data_model medium -o "D:\Projects\Lab
+#        equipment\RFUART\FW\pingpong\STM8L_pingpong\Debug\Obj" --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.3\stm8\LIB\dlstm8mmn.h" -D STM8L15X_LD -lcN "D:\Projects\Lab
+#        equipment\RFUART\FW\pingpong\STM8L_pingpong\Debug\List" -lb
+#        "D:\Projects\Lab
+#        equipment\RFUART\FW\pingpong\STM8L_pingpong\Debug\List" -I
+#        "D:\Projects\Lab equipment\RFUART\FW\STM8L_IAR\" -I "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\src\" -I "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\inc\" -I "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\src\" -I
+#        "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\inc\"
+#        --require_prototypes --vregs 16)
+#    Locale       =  Russian_RUS.1251
+#    List file    =  
+#        D:\Projects\Lab
+#        equipment\RFUART\FW\pingpong\STM8L_pingpong\Debug\List\testmode.lst
+#    Object file  =  
+#        D:\Projects\Lab
+#        equipment\RFUART\FW\pingpong\STM8L_pingpong\Debug\Obj\testmode.o
+#
+###############################################################################
+
+D:\Projects\Lab equipment\RFUART\FW\pingpong\STM8L_pingpong\src\testmode.c
+      1          #include "testmode.h"
+      2          
+      3          void test_loop(void);
+      4          void cbUSART1_RXtestirq(void);
+      5          
+      6          void checkpacket (uint8_t packlen);
+      7          uint8_t compTxCRC (uint8_t c);
+      8          void comp_crc (uint8_t b);
+      9          
+     10          void rec_headH(void);
+     11          void rec_headL(void);
+     12          void rec_command(void);
+     13          void rec_param(void);
+     14          void nocommand(void);
+     15          
+     16          void clearRxBuff(void);
+     17          
+     18          
+     19          
+     20          
+     21          bool TestMode;
+     22          bool FreqTest;
+     23          uint8_t Command;
+     24          static uint8_t temp; //currently received byte
+     25          static uint8_t plen;
+     26          static uint8_t rxstatus;
+     27          static uint8_t rxcount;
+     28          
+     29          uint8_t CRC;
+     30          
+     31          
+     32            /* Test mode loop */
+     33          void test_loop(void)
+     34          {
+     35            TestMode = TRUE; //for interrupt switching
+     36            //switch_to_tx();
+     37            //work_mode = WORK_MODE_TX;
+     38            //RF69_calctemp(); 
+     39            //RF69_setopmode (RF_OPMODE_TRANSMITTER);
+     40            RF69_setopmode (RF_OPMODE_STANDBY);
+     41            Red_On();
+     42            while(1)
+     43            {
+     44              //Red_On();
+     45              //RF69_setopmode (RF_OPMODE_TRANSMITTER);
+     46              //delay_ms(5000);
+     47              //RF69_setopmode (RF_OPMODE_STANDBY);
+     48              //Red_Off();
+     49              //RF69_calctemp();
+     50              
+     51              //delay_ms(500);
+     52              
+     53              if(rxstatus == 4) checkpacket (plen - 1);
+     54              if(CommandFlag) 
+     55              {
+     56                handlecommand(Command);
+     57                clearRxBuff();
+     58              }
+     59              if(RF69_RXtimeout >= F_CORR_TIME)
+     60              {
+     61                //store operation mode
+     62                //measure temp. and correct RF frequency
+     63                RF69_setopmode (RF_OPMODE_STANDBY);
+     64                RF69_calctemp();
+     65                if(FreqTest == TRUE)
+     66                {
+     67                //switch to OOK mode and set 1
+     68                //RF69_setmodulation(DATA_MODE_NOBITSYNC | MOD_TYPE_OOK | MOD_SHAPING_NONE);
+     69                RF69_setopmode (RF_OPMODE_TRANSMITTER);
+     70                }
+     71                RF69_RXtimeout = 0;
+     72              }
+     73            }
+     74          }
+     75          
+     76          void cbUSART1_RXtestirq(void)
+     77          {
+     78            if (USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == SET)
+     79            {
+     80              temp = USART_ReceiveData8(USART1);
+     81              switch (rxstatus)
+     82              {
+     83              case 0://nothing received
+     84              rec_headH();
+     85              break;
+     86          			
+     87              case 1://prefix received
+     88              rec_headL();
+     89              break;
+     90          			
+     91              case 2://address received
+     92              rec_command();
+     93              break;
+     94          			
+     95              case 3://command received
+     96              rec_param();
+     97              break;
+     98          			
+     99              case 4://command not executed, nothing to do
+    100              break;
+    101          			
+    102              default:
+    103              nocommand();
+    104              break;
+    105          					
+    106              } //switch
+    107            } //if
+    108          
+    109          }
+    110          
+    111          ////////////////////////////////////////////////////
+    112          //#define TXPREFIX 0xC96C //"handset" ;)
+    113          //#define RXPREFIX 0x236B //"base station" ;)
+    114          
+    115          void rec_headH(void)
+    116          {
+    117            if (temp == HI(RXPREFIX))
+    118            {
+    119              RXbuffer[RxPointer] = temp;
+    120              RxPointer++;
+    121              rxstatus = 1;
+    122            }
+    123            else nocommand();
+    124          }
+    125          
+    126          void rec_headL(void)
+    127          {
+    128            if (temp == LO (RXPREFIX))
+    129            {
+    130              RXbuffer[RxPointer] = temp;
+    131              RxPointer++;
+    132              rxstatus = 2;
+    133            }
+    134            else 
+    135            {//check prefix
+    136            if (temp == HI(RXPREFIX))
+    137            {
+    138              RxPointer = 0;
+    139              RXbuffer[RxPointer] = temp;
+    140              RxPointer++;
+    141              rxstatus = 1;
+    142             }
+    143            else nocommand();
+    144            }
+    145          	
+    146          }
+    147          
+    148          void rec_command(void)
+    149          {
+    150            uint8_t i = 0;
+    151            while ((COMMANDLIST[i] != 0))
+    152            {
+    153              if (temp == COMMANDLIST[i])
+    154              {
+    155                plen = COMMANDLIST[i+1];
+    156                rxcount = plen-3;
+    157                RXbuffer[RxPointer] = temp;
+    158                RxPointer++;
+    159                rxstatus = 3;
+    160                break;
+    161              }
+    162              else i += 2;
+    163            } //while ((COMMANDLIST[i] != 0))
+    164            
+    165            if 	(rxstatus != 3) 
+    166            {
+    167            //plen = 0;
+    168            rxcount = 0;
+    169            clearRxBuff(); //command not found
+    170            }
+    171          }
+    172          
+    173          void rec_param(void)
+    174          {
+    175            RXbuffer[RxPointer] = temp;
+    176            RxPointer++;
+    177            rxcount--;
+    178            if (rxcount == 0) rxstatus = 4; 
+    179          }
+    180          
+    181          void nocommand(void)
+    182          {
+    183            CommandFlag = FALSE;
+    184            rxcount = 0;
+    185            clearRxBuff();
+    186          }
+    187          
+    188          void clearRxBuff(void)
+    189          
+    190          {
+    191          	RxPointer=0;
+    192          	RXbuffer[0]=0;
+    193          	CommandFlag=FALSE;
+    194          	rxstatus = 0;
+    195          }
+    196          
+    197          
+    198          
+    199          void checkpacket (uint8_t packlen)
+    200          {
+    201           	uint8_t i;
+    202          	CRC=0;
+    203          	for (i=0; i<packlen; i++)	
+    204          	{
+    205          	comp_crc (RXbuffer[i]);
+    206          	}
+    207          	if (CRC == RXbuffer[packlen]) 
+    208          	{
+    209          	CommandFlag = TRUE;
+    210          	Command = RXbuffer[2];
+    211          	}
+    212          	else clearRxBuff();
+    213          	
+    214          } 
+    215          
+    216          
+    217          
+    218          uint8_t compTxCRC (uint8_t c)
+    219          {
+    220            uint8_t i;
+    221            CRC=0;
+    222            for (i=0; i<c; i++) comp_crc(TXbuffer[i]);
+    223            return CRC;
+    224          }//CompCRC
+    225          
+    226          
+    227          void comp_crc (uint8_t b)
+    228          {
+    229            uint8_t j;
+    230            for (j=8; j>0; j--)
+    231              {
+    232              if ( (b ^ CRC) & 0x01) CRC = ( (CRC ^ CRCPOLY) >> 1 ) | 0x80; 
+    233              else CRC >>= 1;
+    234              b >>= 1;
+    235              }
+    236          }//comp_crc
+    237          
+    238          
+    239          
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      16  ?Subroutine0
+      13  ?Subroutine1
+      11  ?Subroutine2
+       1  CRC
+       1  Command
+       1  FreqTest
+       1  TestMode
+      64  cbUSART1_RXtestirq
+      52  checkpacket
+      17  clearRxBuff
+      31  compTxCRC
+      50  comp_crc
+      12  nocommand
+       1  plen
+      63  rec_command
+      16  rec_headH
+      40  rec_headL
+      15  rec_param
+       1  rxcount
+       1  rxstatus
+       1  temp
+      81  test_loop
+
+ 
+ 481 bytes in section .far_func.text
+   8 bytes in section .near.bss
+ 
+ 481 bytes of CODE memory
+   8 bytes of DATA memory
+
+Errors: none
+Warnings: none

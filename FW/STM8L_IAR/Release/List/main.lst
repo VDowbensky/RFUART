@@ -1,0 +1,594 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V3.10.1.201 for STM8                 23/Jan/2019  18:11:10
+# Copyright 2010-2017 IAR Systems AB.
+# PC-locked license - IAR Embedded Workbench for STMicroelectronics STM8
+#
+#    Source file  =  D:\Projects\Lab equipment\RFUART\FW\STM8L_IAR\src\main.c
+#    Command line =  
+#        -f C:\Users\Gemicle\AppData\Local\Temp\EWE227.tmp ("D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\src\main.c" -e -Ohz --debug --code_model
+#        medium --data_model medium -o "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\Release\Obj" --dlib_config "C:\Program
+#        Files (x86)\IAR Systems\Embedded Workbench 8.0\stm8\LIB\dlstm8mmn.h"
+#        -D STM8L15X_LD -lcN "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\Release\List" -lb "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\Release\List" -I "D:\Projects\Lab
+#        equipment\RFUART\FW\IAR\" -I "D:\Projects\Lab
+#        equipment\RFUART\FW\IAR\src\" -I "D:\Projects\Lab
+#        equipment\RFUART\FW\IAR\inc\" -I "D:\Projects\Lab
+#        equipment\RFUART\FW\IAR\STM8L15x_StdPeriph_Driver\src\" -I
+#        "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\" -I
+#        "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\inc\" -I
+#        "D:\Projects\Lab equipment\RFUART\FW\STM8L_IAR\inc\"
+#        --require_prototypes --vregs 16)
+#    Locale       =  Russian_RUS.1251
+#    List file    =  
+#        D:\Projects\Lab equipment\RFUART\FW\STM8L_IAR\Release\List\main.lst
+#    Object file  =  
+#        D:\Projects\Lab equipment\RFUART\FW\STM8L_IAR\Release\Obj\main.o
+#
+###############################################################################
+
+D:\Projects\Lab equipment\RFUART\FW\STM8L_IAR\src\main.c
+      1          /**
+      2            ******************************************************************************
+      3            * @file    Project/STM8L15x_StdPeriph_Template/main.c
+      4            * @author  MCD Application Team
+      5            * @version V1.6.1
+      6            * @date    30-September-2014
+      7            * @brief   Main program body
+      8            ******************************************************************************
+      9            * @attention
+     10            *
+     11            * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
+     12            *
+     13            * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
+     14            * You may not use this file except in compliance with the License.
+     15            * You may obtain a copy of the License at:
+     16            *
+     17            *        http://www.st.com/software_license_agreement_liberty_v2
+     18            *
+     19            * Unless required by applicable law or agreed to in writing, software 
+     20            * distributed under the License is distributed on an "AS IS" BASIS, 
+     21            * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     22            * See the License for the specific language governing permissions and
+     23            * limitations under the License.
+     24            *
+     25            ******************************************************************************
+     26            */
+     27          
+     28          /* Includes ------------------------------------------------------------------*/
+     29          #include "stm8l15x.h"
+     30          #include "main.h"
+     31          #include "user_settings.h"
+     32          
+     33          /** @addtogroup STM8L15x_StdPeriph_Template
+     34            * @{
+     35            */
+     36          
+     37          /* Private typedef -----------------------------------------------------------*/
+     38          /* Private define ------------------------------------------------------------*/
+     39          /* Private macro -------------------------------------------------------------*/
+     40          /* Private variables ---------------------------------------------------------*/
+     41          __IO uint16_t TimingDelay = 0;
+     42          volatile uint8_t Key;
+     43          uint8_t work_mode;
+     44          
+     45          char GPSstring[] = "235959.999,1111.2222,N,11111.2222,E"; 
+     46          const char GPSdef[] = "235959.000,0000.0000,N,00000.0000,E"; 
+     47          char TESTstring[] = "010101.000,0000.0000,X,00000.0000,Y"; 
+     48          
+     49          /* Private function prototypes -----------------------------------------------*/
+     50          void initCLK(void);
+     51          
+     52          void initTIM4(void);
+     53          void delay_ms (uint16_t ms);
+     54          void initRTC(void);
+     55          
+     56          void UART_senddata(void);
+     57          
+     58          void sendtestpacket(void);
+     59          void sendGPSpacket(void);
+     60          void switch_to_tx (void);
+     61          void switch_to_rx (void);
+     62          
+     63          void TimingDelay_Decrement(void);
+     64          
+     65          void convert(uint16_t v);
+     66          void convert8(uint8_t v);
+     67          
+     68          uint8_t PacketFlag;
+     69          uint8_t Periodic_Mode;
+     70          volatile uint8_t PacketDelay;
+     71          uint16_t PacketNumber = 0;
+     72          volatile uint8_t RF69_RXflag = 0;
+     73          volatile uint16_t RF69_RXtimeout = 0;
+     74          uint8_t RxState = 0;
+     75          uint8_t RxLen; //packet length
+     76          uint8_t c8[3] = {0,0,0};
+     77          uint8_t UARTtxflag;
+     78          int8_t Rssi;
+     79          
+     80          int8_t packnum[5] = {0x30, 0x30, 0x30, 0x30, 0x30};
+     81          
+     82          //debug variables
+     83          uint8_t DebugVar0;
+     84          uint8_t DebugVar1;
+     85          uint8_t DebugVar2;
+     86          uint8_t DebugVar3;
+     87          uint8_t DebugVar4;
+     88          uint8_t DebugVar5;
+     89          uint8_t DebugVar6;
+     90          uint8_t DebugVar7;
+     91          
+     92          
+     93          
+     94          /* Private functions ---------------------------------------------------------*/
+     95          
+     96          void initCLK(void)
+     97          {
+     98            CLK_DeInit();
+     99            //CLK_HSEConfig(CLK_HSE_ON);
+    100            //CLK_HSEConfig(CLK_HSI_ON);
+    101            CLK_SYSCLKDivConfig(CLK_SYSCLKDiv_1);
+    102            //CLK_SYSCLKSourceConfig(CLK_SYSCLKSource_HSE);
+    103            //CLK_SYSCLKSourceConfig(CLK_SYSCLKSource_HSI);
+    104            //CLK_SYSCLKSourceSwitchCmd(ENABLE);
+    105            
+    106            //enable peripheral clocks
+    107            //CLK_PeripheralClockConfig(CLK_Peripheral_TIM1, ENABLE);
+    108            //CLK_PeripheralClockConfig(CLK_Peripheral_TIM2, ENABLE);
+    109            //CLK_PeripheralClockConfig(CLK_Peripheral_TIM3, ENABLE);
+    110            CLK_PeripheralClockConfig(CLK_Peripheral_TIM4, ENABLE);
+    111            CLK_PeripheralClockConfig(CLK_Peripheral_SPI1, ENABLE);
+    112            CLK_PeripheralClockConfig(CLK_Peripheral_USART1, ENABLE);
+    113            
+    114            //CLK_LSEConfig(CLK_LSE_ON);
+    115            CLK_LSICmd(ENABLE);
+    116            //CLK_RTCClockConfig(CLK_RTCCLKSource_LSE, CLK_RTCCLKDiv_1);
+    117            CLK_RTCClockConfig(CLK_RTCCLKSource_LSI, CLK_RTCCLKDiv_1);
+    118            CLK_PeripheralClockConfig(CLK_Peripheral_RTC, ENABLE);
+    119            
+    120            
+    121          }
+    122          
+    123          void switch_to_tx (void)
+    124          {
+    125            GPIO_Init(RFPORT, DIO0_PIN, GPIO_Mode_In_FL_No_IT);
+    126            GPIO_Init(RFPORT, DIO1_PIN, GPIO_Mode_In_FL_No_IT);
+    127            RF69_setopmode (RF_OPMODE_STANDBY);
+    128            //increment address on changing testing point
+    129            NodeAddr++;
+    130            if(NodeAddr > 254) NodeAddr = 0;
+    131            RF69_setNodeAddr(NodeAddr);
+    132            RF69_writereg(REG_DIOMAPPING1, DIOM1_TX);
+    133          }
+    134          
+    135          void switch_to_rx (void)
+    136          {
+    137            GPIO_Init(RFPORT, DIO0_PIN, GPIO_Mode_In_FL_IT);
+    138            //GPIO_Init(RFPORT, DIO1_PIN, GPIO_Mode_In_FL_IT);
+    139            RF69_restartRX();
+    140            //GPIO_Init(RFPORT, DIO1_PIN, GPIO_Mode_In_FL_IT);
+    141            work_mode = WORK_MODE_RX;
+    142            RF69_RXflag = 0;
+    143            Red_Off();
+    144          }
+    145          
+    146          void sendtestpacket(void)
+    147          {
+    148            uint8_t i;
+    149            Red_On();
+    150            work_mode = WORK_MODE_TX;
+    151            RF69_setopmode (RF_OPMODE_TRANSMITTER);
+    152            //wait for TX ready - ???
+    153            
+    154            //2,3,4,5,6
+    155            convert(PacketNumber);
+    156            for(i = 0; i < 5; i++) RF69_TXbuffer[i+2] = packnum[i];
+    157            RF69_TXbuffer[7] = ',';
+    158            RF69_TXbuffer[8] = 'T';
+    159            RF69_TXbuffer[9] = ',';
+    160            //7 and up; add 3 bytes to WORK_PACKET_LEN
+    161            for(i  = 0; i < WORK_PACKET_LEN-2; i++) RF69_TXbuffer[i+10] = TESTstring[i]; //ABCD.......
+    162            delay_ms(1);
+    163            RF69_sendpacket(WORK_PACKET_LEN, NodeAddr); //32 bytes, address 0xFF will be changed
+    164            RF69_setopmode (RF_OPMODE_STANDBY); //maybe receiver
+    165            PacketNumber++;
+    166            Red_Off();
+    167          }
+    168          
+    169          void sendGPSpacket(void)
+    170          {
+    171            uint8_t i;
+    172            Red_On();
+    173            switch_to_tx();
+    174            work_mode = WORK_MODE_TX;
+    175            RF69_setopmode (RF_OPMODE_TRANSMITTER);
+    176            //2,3,4,5,6
+    177            convert(PacketNumber);
+    178            for(i = 0; i < 5; i++) RF69_TXbuffer[i+2] = packnum[i];
+    179            RF69_TXbuffer[7] = ',';
+    180            RF69_TXbuffer[8] = validity;
+    181            RF69_TXbuffer[9] = ',';
+    182            //7 and up; add 3 bytes to WORK_PACKET_LEN
+    183            for(i  = 0; i < WORK_PACKET_LEN-2; i++) RF69_TXbuffer[i+10] = GPSstring[i]; //ABCD.......
+    184            delay_ms(1);
+    185            RF69_sendpacket(WORK_PACKET_LEN, NodeAddr); //
+    186             delay_ms(1);
+    187            RF69_setopmode (RF_OPMODE_STANDBY); //maybe receiver
+    188            //switch_to_rx();
+    189            PacketNumber++;
+    190            Red_Off();
+    191          }
+    192          
+    193          void initTIM4(void)
+    194          {
+    195            TIM4_DeInit();
+    196            TIM4_TimeBaseInit(TIM4_Prescaler_64, (F_CPU/64)/1000); //1 ms
+    197            TIM4_ClearFlag(TIM4_FLAG_Update);
+    198            TIM4_ITConfig(TIM4_IT_Update, ENABLE);
+    199            TIM4_Cmd(ENABLE);
+    200          }
+    201          
+    202          void delay_ms (uint16_t ms)
+    203          {
+    204           
+    205            TimingDelay = ms;
+    206            while (TimingDelay != 0);
+    207          
+    208          }
+    209          
+    210          void TimingDelay_Decrement(void)
+    211          {
+    212            TimingDelay--;
+    213          }
+    214              
+    215          
+    216          void initRTC(void)
+    217          {
+    218            //RTC_DeInit(); //maybe removed
+    219            RTC_WakeUpClockConfig(RTC_WakeUpClock_RTCCLK_Div16);
+    220            RTC_ITConfig(RTC_IT_WUT, ENABLE);
+    221            //set 1 s wkup period
+    222            RTC_SetWakeUpCounter(2375);
+    223            RTC_WakeUpCmd(ENABLE);
+    224              
+    225          }
+    226          
+    227          //convert number to string
+    228          void convert(uint16_t v)
+    229          {
+    230            uint16_t tmp;
+    231            tmp = v;
+    232            packnum[0] = v/10000 + 0x30;
+    233            tmp = v%10000;
+    234            packnum[1] = tmp/1000 + 0x30;
+    235            tmp = tmp%1000;
+    236            packnum[2] = tmp/100 + 0x30;
+    237            tmp = tmp%100;
+    238            packnum[3] = tmp/10 + 0x30;
+    239            packnum[4] = tmp%10 + 0x30;
+    240            
+    241          }
+    242          
+    243          void convert8(uint8_t v)
+    244          {
+    245            uint8_t tmp;
+    246            tmp = v;
+    247            c8[0] = tmp/100 + 0x30;
+    248            tmp = tmp%100;
+    249            c8[1] = tmp/10 + 0x30;
+    250            c8[2] = tmp%10 + 0x30;
+    251          }
+    252          
+    253           void UART_senddata(void)
+    254           {
+    255                //send packet to UART 
+    256                //fill UART buffer
+    257                uint8_t i;
+    258                UARTtxflag = 0;
+    259                Green_On();
+    260                convert8(RF69_RXbuffer[0]); //lenght
+    261                TXbuffer[0] = c8[0];
+    262                TXbuffer[1] = c8[1];
+    263                TXbuffer[2] = c8[2];
+    264                TXbuffer[3] = ',';
+    265                convert8(RF69_RXbuffer[1]); //address
+    266                TXbuffer[4] = c8[0];
+    267                TXbuffer[5] = c8[1];
+    268                TXbuffer[6] = c8[2];
+    269                TXbuffer[7] = ',';
+    270                convert8(Rssi);
+    271                TXbuffer[8] = '-';
+    272                TXbuffer[9] = c8[0];
+    273                TXbuffer[10] = c8[1];
+    274                TXbuffer[11] = c8[2];
+    275                TXbuffer[12] = ',';
+    276                //for (i = 0; i < tmp+1; i++) TXbuffer[i+1] = RF69_RXbuffer[i];
+    277                for (i = 0; i < RxLen-1; i++) TXbuffer[i+13] = RF69_RXbuffer[i+2];
+    278                TXbuffer[i+13] = 0x0D;
+    279                i++;
+    280                TXbuffer[i+13] = 0x0A;
+    281                USART_SendBlock(RxLen+13); //set correct value
+    282                Green_Off();
+    283           }  
+    284          
+    285          
+    286          /**
+    287            * @brief  Main program.
+    288            * @param  None
+    289            * @retval None
+    290            */
+    291          void main(void)
+    292          {
+    293            //init clock - HSE 16 MHz
+    294            initCLK();
+    295            //IO config
+    296            initIO();
+    297            initSPI();
+    298            initUART(BAUDRATE);
+    299            initTIM4();
+    300            initRTC();
+    301            enableInterrupts();
+    302            Green_On();
+    303            Red_On();
+    304            delay_ms(200);
+    305            RF69_init();
+    306            delay_ms(200);
+    307            Red_Off();
+    308            //RF69_setchannel(Channel);
+    309            PacketDelay = PACKET_DELAY;
+    310            work_mode = WORK_MODE_RX;
+    311            Green_Off();
+    312            switch_to_rx();
+    313            
+    314            
+    315            
+    316            /* Infinite loop */
+    317            while (1)
+    318            {
+    319          
+    320              switch (Key)
+    321              {
+    322              case KEY_LEFT:
+    323                while (Key); //wait for release
+    324                if(!Periodic_Mode)
+    325                {
+    326                switch_to_tx();
+    327                Periodic_Mode = 1;
+    328                PacketNumber = 0;
+    329                }
+    330                else {}
+    331                break;
+    332                
+    333              case KEY_RIGHT:
+    334                while (Key); //wait for release
+    335                switch_to_rx();
+    336                Periodic_Mode = 0;
+    337                break;
+    338                
+    339              case KEY_BOTH:
+    340                while (Key); //wait for release
+    341                break;
+    342                
+    343              default:
+    344                break; //nothing to do
+    345                
+    346              }
+    347              
+    348              if (PacketFlag)
+    349              {
+    350                
+    351                PacketFlag = 0;
+    352                if (Periodic_Mode) 
+    353                  if(GPSok)
+    354                  {
+    355                    sendGPSpacket();
+    356                    GPSok = 0;
+    357                    
+    358                  }
+    359                else sendtestpacket();
+    360                
+    361              }
+    362              
+    363              //check and decode RX packets here!!!
+    364              if(RF69_RXflag)
+    365              {
+    366                //add new variable - RX state;
+    367                uint8_t i;
+    368                /*
+    369                switch(RxState)
+    370                {
+    371                // 0 - RX ready (RSSI threshold crossed, AFC and AGC done)
+    372                //remap DIO for SyncAddrMatch waiting, set timer, set RXstate = 1
+    373              case 0:
+    374              RF69_setDIOmapping(DIOM1_RX, DIOM2_DEFAULT); //wait for payload ready
+    375              RxState = 1;
+    376                //1 - payload ready, read FIFO then temap DIO for RX ready, restart RX, set UART_TXneeded flag
+    377              case 1:
+    378                    
+    379                Green_On();
+    380                //RF69_setopmode (RF_OPMODE_STANDBY);
+    381                Rssi = RF69_getRSSI();
+    382                //read data length
+    383                RxLen = RF69_readreg(REG_FIFO);
+    384                //fill buffer
+    385                RF69_RXbuffer[0] = RxLen;
+    386                for (i = 1; i < RxLen+1; i++) RF69_RXbuffer[i] = RF69_readreg(REG_FIFO);
+    387                RF69_clearFIFO();
+    388                RF69_RXflag = 0;
+    389                RF69_restartRX();
+    390                //set flag for UART
+    391                UARTtxflag = 1;
+    392                break;
+    393                
+    394                default:
+    395                RF69_restartRX();
+    396                break;
+    397                }//switch(RXstate)
+    398                */
+    399                
+    400                DebugVar0 = RF69_readreg(REG_IRQFLAGS1);
+    401                DebugVar1 = RF69_readreg(REG_IRQFLAGS2);
+    402                DebugVar2 = RF69_readreg(REG_RXTIMEOUT1);
+    403                DebugVar3 = RF69_readreg(REG_RXTIMEOUT2);
+    404                
+    405                
+    406                //RF69_RXtimeout = 0;
+    407                //RF69_setopmode (RF_OPMODE_STANDBY);
+    408                Rssi = RF69_getRSSI();
+    409                //read data length
+    410                RxLen = RF69_readreg(REG_FIFO);
+    411                //fill buffer
+    412                RF69_RXbuffer[0] = RxLen;
+    413                for (i = 1; i < RxLen+1; i++) RF69_RXbuffer[i] = RF69_readreg(REG_FIFO);
+    414                RF69_clearFIFO();
+    415                RF69_RXflag = 0;
+    416                RF69_restartRX();
+    417                //RF69_setPacketConfig2(WORK_PACKETCONFIG2);
+    418                //RF69_startRSSI();
+    419                //set flag for UART
+    420                UARTtxflag = 1;
+    421                
+    422          
+    423              }
+    424              
+    425              //RX timeout - restart RX (separate function in RF69 driver)
+    426              if ((work_mode == WORK_MODE_RX) && (RF69_RXtimeout >= RF69TIMEOUT)) //reset after extended timeout defined by user
+    427              //if ((work_mode == WORK_MODE_RX) && checkDIO1()) //reset RX immediately on RF69 timeout
+    428              {
+    429                DebugVar0 = RF69_readreg(REG_IRQFLAGS1);
+    430                DebugVar1 = RF69_readreg(REG_IRQFLAGS2);
+    431                DebugVar2 = RF69_readreg(REG_RXTIMEOUT1);
+    432                DebugVar3 = RF69_readreg(REG_RXTIMEOUT2);
+    433                DebugVar4 = RF69_RXtimeout;
+    434                
+    435                //RF69_writereg(REG_IRQFLAGS1, RF69_readreg(REG_IRQFLAGS1) & ~0x08);
+    436                RF69_restartRX();
+    437          
+    438              }
+    439              
+    440              
+    441              
+    442              //check UART commands and GPS data
+    443             
+    444              //prepare and send GPS packet if ready
+    445              
+    446              if(GPSflag)
+    447              {
+    448                
+    449                GPSflag = 0;
+    450                GPSparse();
+    451               
+    452              }
+    453          
+    454              
+    455              if (UARTtxflag) UART_senddata();
+    456              
+    457              
+    458             }//while(1)
+    459          }//main()
+    460          
+    461          #ifdef  USE_FULL_ASSERT
+    462          
+    463          /**
+    464            * @brief  Reports the name of the source file and the source line number
+    465            *   where the assert_param error has occurred.
+    466            * @param  file: pointer to the source file name
+    467            * @param  line: assert_param error line source number
+    468            * @retval None
+    469            */
+    470          void assert_failed(uint8_t* file, uint32_t line)
+    471          { 
+    472            /* User can add his own implementation to report the file name and line number,
+    473               ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+    474          
+    475            /* Infinite loop */
+    476            while (1)
+    477            {
+    478            }
+    479          }
+    480          #endif
+    481          
+    482          /**
+    483            * @}
+    484            */
+    485          
+    486          
+    487            
+    488            
+    489          
+    490            
+    491          
+    492          /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       7  ??Subroutine8_0
+       7  ??Subroutine9_0
+      14  ?Subroutine0
+      20  ?Subroutine1
+       2  ?Subroutine2
+      17  ?Subroutine3
+      18  ?Subroutine4
+       2  ?Subroutine5
+      11  ?Subroutine6
+      37  ?Subroutine7
+       1  DebugVar0
+       1  DebugVar1
+       1  DebugVar2
+       1  DebugVar3
+       1  DebugVar4
+       1  DebugVar5
+       1  DebugVar6
+       1  DebugVar7
+      36  GPSdef
+      36  GPSstring
+       1  Key
+       1  PacketDelay
+       1  PacketFlag
+       2  PacketNumber
+       1  Periodic_Mode
+       1  RF69_RXflag
+       2  RF69_RXtimeout
+       1  Rssi
+       1  RxLen
+       1  RxState
+      36  TESTstring
+       2  TimingDelay
+       8  TimingDelay_Decrement
+     159  UART_senddata
+       1  UARTtxflag
+       3  c8
+      96  convert
+      42  convert8
+       9  delay_ms
+      63  initCLK
+      27  initRTC
+      36  initTIM4
+     321  main
+       5  packnum
+      64  sendGPSpacket
+      53  sendtestpacket
+      24  switch_to_rx
+      49  switch_to_tx
+       1  work_mode
+
+ 
+ 1 086 bytes in section .far_func.text
+    27 bytes in section .near.bss
+    77 bytes in section .near.data
+    36 bytes in section .near.rodata
+ 
+ 1 086 bytes of CODE  memory
+    36 bytes of CONST memory
+   104 bytes of DATA  memory
+
+Errors: none
+Warnings: none

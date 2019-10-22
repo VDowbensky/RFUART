@@ -1,0 +1,170 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V3.10.1.201 for STM8                 23/Jan/2019  18:06:12
+# Copyright 2010-2017 IAR Systems AB.
+# PC-locked license - IAR Embedded Workbench for STMicroelectronics STM8
+#
+#    Source file  =  
+#        D:\Projects\Lab equipment\RFUART\FW\STM8L_IAR\src\gpsparser.c
+#    Command line =  
+#        -f C:\Users\Gemicle\AppData\Local\Temp\EW5843.tmp ("D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\src\gpsparser.c" -e -Ohz --debug
+#        --code_model medium --data_model medium -o "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\Release\Obj" --dlib_config "C:\Program
+#        Files (x86)\IAR Systems\Embedded Workbench 8.0\stm8\LIB\dlstm8mmn.h"
+#        -D STM8L15X_LD -lcN "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\Release\List" -lb "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\Release\List" -I "D:\Projects\Lab
+#        equipment\RFUART\FW\IAR\" -I "D:\Projects\Lab
+#        equipment\RFUART\FW\IAR\src\" -I "D:\Projects\Lab
+#        equipment\RFUART\FW\IAR\inc\" -I "D:\Projects\Lab
+#        equipment\RFUART\FW\IAR\STM8L15x_StdPeriph_Driver\src\" -I
+#        "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\" -I
+#        "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\inc\" -I
+#        "D:\Projects\Lab equipment\RFUART\FW\STM8L_IAR\inc\"
+#        --require_prototypes --vregs 16)
+#    Locale       =  Russian_RUS.1251
+#    List file    =  
+#        D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\Release\List\gpsparser.lst
+#    Object file  =  
+#        D:\Projects\Lab equipment\RFUART\FW\STM8L_IAR\Release\Obj\gpsparser.o
+#
+###############################################################################
+
+D:\Projects\Lab equipment\RFUART\FW\STM8L_IAR\src\gpsparser.c
+      1          #include "gpsparser.h"
+      2          
+      3          void GPSparse(void);
+      4          void resetGPSparser(void);
+      5          uint8_t checkheader(void);
+      6          
+      7          uint8_t GPSflag;
+      8          char GPSbuffer[GPSBUFFERSIZE];
+      9          const char GPShead1[8] = "$GPRMC,";
+     10          const char GPShead2[8] = "$GNRMC,";
+     11          char validity;
+     12          
+     13          //const char GPSheader[] = "$GPRMC";
+     14          
+     15          uint8_t GPSstatus = 0;
+     16          uint8_t CommaPos[20];
+     17          uint8_t commacount;
+     18          uint8_t GPSok;
+     19          
+     20          uint8_t readpointer = 0;
+     21          
+     22          void GPSparse(void)
+     23          {
+     24            uint8_t i;
+     25            uint8_t j;
+     26            uint8_t len;
+     27            //copy RX buffer
+     28            disableInterrupts();
+     29            for(i = 0; i < RxPointer; i++) GPSbuffer[i] = RXbuffer[i];
+     30            len = RxPointer;
+     31            clearRXbuffer();
+     32            enableInterrupts();
+     33            //check GPS string
+     34           //GPSok = 0;
+     35            if(checkheader())
+     36            {
+     37              //find and count commas in string
+     38            i = 0;
+     39            commacount = 0;
+     40            j = 0;
+     41           for (i = 0; i < len; i++)
+     42           {
+     43             if (GPSbuffer[i] == ',')
+     44             {
+     45                commacount++;
+     46                CommaPos[j] = i;
+     47                j++;
+     48             }
+     49            
+     50             
+     51           }
+     52           
+     53           //find strings 
+     54           //char GPSstring[] = "235959.000,0000.0000,N,00000.0000,E"; 
+     55           //time
+     56           for(i = 0; i < 10; i++) GPSstring [i] = GPSbuffer[i+CommaPos[0]+1];
+     57           GPSstring [10] = ',';
+     58           validity = GPSbuffer[CommaPos[1]+1];
+     59           //latitude
+     60           if ((CommaPos[3] - CommaPos[2]) > 1)
+     61            {
+     62              for(i = 0; i < (CommaPos[3] - CommaPos[2]); i++) GPSstring [i + 11] = GPSbuffer[i+CommaPos[2]+1];
+     63              GPSstring[21] = GPSbuffer[CommaPos[3]+1];
+     64            }
+     65           GPSstring[20] = ','; //comma
+     66           
+     67           //longitude
+     68           if ((CommaPos[5] - CommaPos[4]) > 1) 
+     69            {
+     70              for(i = 0; i < (CommaPos[5] - CommaPos[4]); i++) GPSstring [i + 23] = GPSbuffer[i+CommaPos[4]+1];
+     71              GPSstring[34] = GPSbuffer[CommaPos[5] +1];
+     72            }
+     73            GPSstring[33] = ','; //comma
+     74            GPSok = 1;
+     75            }
+     76            //check incoming command here - search command in GPSbuffer
+     77            
+     78            resetGPSparser();
+     79            
+     80          }
+     81          
+     82          uint8_t checkheader(void)
+     83          {
+     84            uint8_t i;
+     85            for(i = 0; i < 7; i++)
+     86            {
+     87              if ((GPSbuffer[i] != GPShead1[i]) && (GPSbuffer[i] != GPShead2[i])) return 0;
+     88            }
+     89            return 1;
+     90          }
+     91          
+     92          void resetGPSparser(void)
+     93          {
+     94            
+     95            GPSstatus = 0;
+     96            commacount = 0;
+     97            readpointer = 0;
+     98            clearRXbuffer();
+     99            
+    100          }
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      11  ??Subroutine2_0
+       2  ?Subroutine0
+      14  ?Subroutine1
+      20  CommaPos
+     128  GPSbuffer
+       1  GPSflag
+       8  GPShead1
+       8  GPShead2
+       1  GPSok
+     232  GPSparse
+       1  GPSstatus
+      32  checkheader
+       1  commacount
+       1  readpointer
+      16  resetGPSparser
+       1  validity
+
+ 
+ 307 bytes in section .far_func.text
+ 154 bytes in section .near.bss
+  16 bytes in section .near.rodata
+ 
+ 307 bytes of CODE  memory
+  16 bytes of CONST memory
+ 154 bytes of DATA  memory
+
+Errors: none
+Warnings: none

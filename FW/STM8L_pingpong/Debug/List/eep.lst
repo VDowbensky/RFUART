@@ -1,0 +1,103 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V3.11.1.207 for STM8                 26/Jul/2019  14:50:12
+# Copyright 2010-2019 IAR Systems AB.
+# PC-locked license - IAR Embedded Workbench for STMicroelectronics STM8
+#
+#    Source file  =  
+#        D:\Projects\Lab equipment\RFUART\FW\pingpong\STM8L_pingpong\src\eep.c
+#    Command line =  
+#        -f C:\Users\Gemicle\AppData\Local\Temp\EWB31C.tmp ("D:\Projects\Lab
+#        equipment\RFUART\FW\pingpong\STM8L_pingpong\src\eep.c" -e -Ohz --debug
+#        --code_model medium --data_model medium -o "D:\Projects\Lab
+#        equipment\RFUART\FW\pingpong\STM8L_pingpong\Debug\Obj" --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.3\stm8\LIB\dlstm8mmn.h" -D STM8L15X_LD -lcN "D:\Projects\Lab
+#        equipment\RFUART\FW\pingpong\STM8L_pingpong\Debug\List" -lb
+#        "D:\Projects\Lab
+#        equipment\RFUART\FW\pingpong\STM8L_pingpong\Debug\List" -I
+#        "D:\Projects\Lab equipment\RFUART\FW\STM8L_IAR\" -I "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\src\" -I "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\inc\" -I "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\src\" -I
+#        "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\inc\"
+#        --require_prototypes --vregs 16)
+#    Locale       =  Russian_RUS.1251
+#    List file    =  
+#        D:\Projects\Lab
+#        equipment\RFUART\FW\pingpong\STM8L_pingpong\Debug\List\eep.lst
+#    Object file  =  
+#        D:\Projects\Lab
+#        equipment\RFUART\FW\pingpong\STM8L_pingpong\Debug\Obj\eep.o
+#
+###############################################################################
+
+D:\Projects\Lab equipment\RFUART\FW\pingpong\STM8L_pingpong\src\eep.c
+      1          #include "eeprom.h"
+      2          #include <iostm8l051f3.h>
+      3          // The user must implement the three extern-declared functions below
+      4          // in order for the compiler to be able to automatically write to the
+      5          // EEPROM memory when __eeprom variables are assigned to.
+      6          
+      7          #ifdef __cplusplus
+      8          extern "C" {
+      9          #endif
+     10          
+     11          #pragma language=extended
+     12            int __eeprom_wait_for_last_operation(void);
+     13          int __eeprom_wait_for_last_operation(void); 
+     14          void __eeprom_program_byte(uint8_t __near * dst, uint8_t v);
+     15          void __eeprom_program_long(uint8_t __near * dst, uint32_t v);
+     16          // Wait for the last data EEPROM operation to finish.  Return 0 if the
+     17          // operation failed, otherwise non-zero.  You may want to handle
+     18          // errors here, since the utility functions below simply ignore
+     19          // errors, aborting multi-write operations early.
+     20          int __eeprom_wait_for_last_operation(void)
+     21          {
+     22            if(FLASH_IAPSR_bit.WR_PG_DIS) return 0;
+     23            while(!FLASH_IAPSR_bit.HVOFF); // Wait until operation completion
+     24            return 1;
+     25          }
+     26          
+     27          // Write one byte to the data EEPROM memory.
+     28          void __eeprom_program_byte(uint8_t __near * dst, uint8_t v)
+     29          {
+     30            *dst = v;
+     31          }
+     32          
+     33          // Write one 4-byte long word to the data EEPROM memory.  The address must be 4-byte aligned.
+     34          void __eeprom_program_long(uint8_t __near * dst, uint32_t v)
+     35          {
+     36            FLASH_CR2_bit.WPRG = 1;
+     37            *(dst++)       = *((uint8_t*)(&v));   
+     38            *(dst++) = *((uint8_t*)(&v) + 1);
+     39            *(dst++) = *((uint8_t*)(&v) + 2);
+     40            *dst = *((uint8_t*)(&v) + 3);  
+     41          }
+     42          
+     43          #pragma language=default
+     44          
+     45          #ifdef __cplusplus
+     46          }
+     47          #endif
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       1  _A_FLASH_CR2
+       1  _A_FLASH_IAPSR
+       2  __eeprom_program_byte
+      26  __eeprom_program_long
+      15  __eeprom_wait_for_last_operation
+
+ 
+ 43 bytes in section .far_func.text
+  2 bytes in section .near.noinit   (abs)
+ 
+ 43 bytes of CODE memory
+  0 bytes of DATA memory (+ 2 bytes shared)
+
+Errors: none
+Warnings: none

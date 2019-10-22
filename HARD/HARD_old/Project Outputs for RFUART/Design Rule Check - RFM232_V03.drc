@@ -1,0 +1,81 @@
+Protel Design System Design Rule Check
+PCB File : D:\Projects\Lab equipment\RFUART\HARD\RFM232_V03.PcbDoc
+Date     : 18.09.2018
+Time     : 10:43:29
+
+Processing Rule : Clearance Constraint (Gap=0.25mm) (InNamedPolygon('GND_B')),(InNet('NetJP3_2'))
+Rule Violations :0
+
+Processing Rule : Clearance Constraint (Gap=0.25mm) (InNamedPolygon('GND-T1') Or  InNamedPolygon('GND-B1')),(All)
+Rule Violations :0
+
+Processing Rule : Clearance Constraint (Gap=0.254mm) (InNamedPolygon('GND_B')),(All)
+Rule Violations :0
+
+Processing Rule : Clearance Constraint (Gap=0.15mm) (All),(InComponent('U1'))
+Rule Violations :0
+
+Processing Rule : Clearance Constraint (Gap=0.35mm) (InNamedPolygon('GND_RF')),(InComponent('R3'))
+Rule Violations :0
+
+Processing Rule : Clearance Constraint (Gap=0.2mm) (All),(All)
+   Violation between Clearance Constraint: (Collision < 0.2mm) Between Pad Free-2(-2.5mm,-2.5mm) on Multi-Layer And Track (-2.5mm,-5mm)(-2.5mm,0mm) on Keep-Out Layer 
+   Violation between Clearance Constraint: (Collision < 0.2mm) Between Pad Free-2(-2.5mm,-2.5mm) on Multi-Layer And Track (-5mm,-2.5mm)(0mm,-2.5mm) on Keep-Out Layer 
+   Violation between Clearance Constraint: (Collision < 0.2mm) Between Pad Free-3(80.5mm,20.5mm) on Multi-Layer And Track (78mm,20.5mm)(83mm,20.5mm) on Keep-Out Layer 
+   Violation between Clearance Constraint: (Collision < 0.2mm) Between Pad Free-3(80.5mm,20.5mm) on Multi-Layer And Track (80.5mm,18mm)(80.5mm,23mm) on Keep-Out Layer 
+   Violation between Clearance Constraint: (Collision < 0.2mm) Between Pad Free-4(-2.5mm,20.5mm) on Multi-Layer And Track (-2.5mm,18mm)(-2.5mm,22.9mm) on Keep-Out Layer 
+   Violation between Clearance Constraint: (Collision < 0.2mm) Between Pad Free-4(-2.5mm,20.5mm) on Multi-Layer And Track (-5mm,20.5mm)(0mm,20.5mm) on Keep-Out Layer 
+   Violation between Clearance Constraint: (Collision < 0.2mm) Between Pad Free-5(80.5mm,-2.5mm) on Multi-Layer And Track (78mm,-2.5mm)(83mm,-2.5mm) on Keep-Out Layer 
+   Violation between Clearance Constraint: (Collision < 0.2mm) Between Pad Free-5(80.5mm,-2.5mm) on Multi-Layer And Track (80.5mm,-5mm)(80.5mm,0mm) on Keep-Out Layer 
+Rule Violations :8
+
+Processing Rule : Short-Circuit Constraint (Allowed=No) (All),(All)
+Rule Violations :0
+
+Processing Rule : Un-Routed Net Constraint ( (All) )
+Rule Violations :0
+
+Processing Rule : Modified Polygon (Allow modified: No), (Allow shelved: No)
+Rule Violations :0
+
+Processing Rule : Width Constraint (Min=0.2mm) (Max=2mm) (Preferred=0.3mm) (All)
+Rule Violations :0
+
+Processing Rule : Power Plane Connect Rule(Relief Connect )(Expansion=0.508mm) (Conductor Width=0.254mm) (Air Gap=0.254mm) (Entries=4) (All)
+Rule Violations :0
+
+Processing Rule : Hole Size Constraint (Min=0.025mm) (Max=2.54mm) (All)
+Rule Violations :0
+
+Processing Rule : Hole To Hole Clearance (Gap=0.254mm) (All),(All)
+Rule Violations :0
+
+Processing Rule : Minimum Solder Mask Sliver (Gap=0.02mm) (All),(All)
+Rule Violations :0
+
+Processing Rule : Silk To Solder Mask (Clearance=0mm) (IsPad),(All)
+Rule Violations :0
+
+Processing Rule : Silk to Silk (Clearance=0.02mm) (All),(All)
+   Violation between Silk To Silk Clearance Constraint: (Collision < 0.02mm) Between Text "D2" (22.165mm,14.7mm) on Top Overlay And Track (21.14mm,13.85mm)(21.79mm,13.85mm) on Top Overlay Silk Text to Silk Clearance [0mm]
+   Violation between Silk To Silk Clearance Constraint: (Collision < 0.02mm) Between Text "JP1" (13.1mm,1.3mm) on Top Overlay And Track (13.7mm,1.5mm)(13.7mm,5mm) on Top Overlay Silk Text to Silk Clearance [0mm]
+   Violation between Silk To Silk Clearance Constraint: (Collision < 0.02mm) Between Text "JP1" (13.1mm,1.3mm) on Top Overlay And Track (6.3mm,1.4mm)(13.7mm,1.4mm) on Top Overlay Silk Text to Silk Clearance [0mm]
+   Violation between Silk To Silk Clearance Constraint: (Collision < 0.02mm) Between Text "L1" (24.5mm,3.5mm) on Top Overlay And Track (24.9mm,3.49mm)(25.1mm,3.49mm) on Top Overlay Silk Text to Silk Clearance [0mm]
+   Violation between Silk To Silk Clearance Constraint: (Collision < 0.02mm) Between Text "R1" (23.85mm,15.7mm) on Top Overlay And Track (24.3mm,15.725mm)(24.4mm,15.725mm) on Top Overlay Silk Text to Silk Clearance [0mm]
+   Violation between Silk To Silk Clearance Constraint: (Collision < 0.02mm) Between Text "R1" (23.85mm,15.7mm) on Top Overlay And Track (24.3mm,16.475mm)(24.4mm,16.475mm) on Top Overlay Silk Text to Silk Clearance [0mm]
+   Violation between Silk To Silk Clearance Constraint: (Collision < 0.02mm) Between Text "R2" (23.75mm,14.1mm) on Top Overlay And Track (24.3mm,14.125mm)(24.4mm,14.125mm) on Top Overlay Silk Text to Silk Clearance [0mm]
+   Violation between Silk To Silk Clearance Constraint: (Collision < 0.02mm) Between Text "R2" (23.75mm,14.1mm) on Top Overlay And Track (24.3mm,14.875mm)(24.4mm,14.875mm) on Top Overlay Silk Text to Silk Clearance [0mm]
+   Violation between Silk To Silk Clearance Constraint: (Collision < 0.02mm) Between Text "R3" (61.5mm,3.4mm) on Top Overlay And Track (62.05mm,3.425mm)(62.15mm,3.425mm) on Top Overlay Silk Text to Silk Clearance [0mm]
+   Violation between Silk To Silk Clearance Constraint: (Collision < 0.02mm) Between Text "R3" (61.5mm,3.4mm) on Top Overlay And Track (62.05mm,4.175mm)(62.15mm,4.175mm) on Top Overlay Silk Text to Silk Clearance [0mm]
+Rule Violations :10
+
+Processing Rule : Net Antennae (Tolerance=0mm) (All)
+Rule Violations :0
+
+Processing Rule : Height Constraint (Min=0mm) (Max=25.4mm) (Prefered=12.7mm) (All)
+Rule Violations :0
+
+
+Violations Detected : 18
+Waived Violations : 0
+Time Elapsed        : 00:00:00

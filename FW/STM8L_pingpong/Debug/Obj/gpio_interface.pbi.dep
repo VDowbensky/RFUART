@@ -1,0 +1,56 @@
+gpio_interface.pbi: \
+  D:\Projects\Lab\ equipment\RFUART\FW\pingpong\STM8L_pingpong\src\gpio_interface.c \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\inc\gpio_interface.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\inc\stm8l15x.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\inc\stm8l15x_conf.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\inc\stm8l15x_adc.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\inc/stm8l15x.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\inc\stm8l15x_aes.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\inc\stm8l15x_beep.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\inc\stm8l15x_clk.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\inc\stm8l15x_comp.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\inc\stm8l15x_dac.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\inc\stm8l15x_dma.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\inc\stm8l15x_exti.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\inc\stm8l15x_flash.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\inc\stm8l15x_gpio.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\inc\stm8l15x_i2c.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\inc\stm8l15x_irtim.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\inc\stm8l15x_itc.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\inc\stm8l15x_iwdg.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\inc\stm8l15x_lcd.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\inc\stm8l15x_pwr.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\inc\stm8l15x_rst.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\inc\stm8l15x_rtc.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\inc\stm8l15x_spi.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\inc\stm8l15x_syscfg.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\inc\stm8l15x_tim1.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\inc\stm8l15x_tim2.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\inc\stm8l15x_tim3.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\inc\stm8l15x_tim4.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\inc\stm8l15x_tim5.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\inc\stm8l15x_usart.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\inc/stm8l15x_clk.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\inc\stm8l15x_wfe.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\inc\stm8l15x_wwdg.h \
+  C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\stm8\inc\c\intrinsics.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\inc/main.h \
+  C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\stm8\inc\c\string.h \
+  C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\stm8\inc\c\ycheck.h \
+  C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\stm8\inc\c\yvals.h \
+  C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\stm8\inc\c\DLib_Defaults.h \
+  C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\stm8\LIB\dlstm8mmn.h \
+  C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\stm8\inc\c\DLib_Product.h \
+  C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\stm8\inc\c\xencoding_limits.h \
+  C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\stm8\inc\c\DLib_Threads.h \
+  C:\Program\ Files\ (x86)\IAR\ Systems\Embedded\ Workbench\ 8.3\stm8\inc\c\ysizet.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\inc/RFM69.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\inc/macro.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\inc/user_settings.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\inc/spi_interface.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\inc/uart_interface.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\inc/gpio_interface.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\inc/eeprom.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\inc/gpsparser.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\inc/testmode.h \
+  D:\Projects\Lab\ equipment\RFUART\FW\STM8L_IAR\inc/uart_commands.h

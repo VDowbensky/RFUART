@@ -1,0 +1,12 @@
+Output: NC Drill Files
+Type  : NC Drill
+From  : Project [RFtest.PrjPCB]
+   Generated File[RFM232_V06_proto.TXT]
+   Generated File[RFM232_V06_proto.LDP]
+   Generated File[RFM232_V06_proto.DRR]
+
+
+Files Generated   : 3
+Documents Printed : 0
+
+Finished Output Generation At 14:40:11 On 11.02.2019

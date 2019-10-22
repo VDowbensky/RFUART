@@ -1,0 +1,209 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V3.11.1.207 for STM8                 26/Jul/2019  14:50:12
+# Copyright 2010-2019 IAR Systems AB.
+# PC-locked license - IAR Embedded Workbench for STMicroelectronics STM8
+#
+#    Source file  =  
+#        D:\Projects\Lab
+#        equipment\RFUART\FW\pingpong\STM8L_pingpong\src\gpio_interface.c
+#    Command line =  
+#        -f C:\Users\Gemicle\AppData\Local\Temp\EWB418.tmp ("D:\Projects\Lab
+#        equipment\RFUART\FW\pingpong\STM8L_pingpong\src\gpio_interface.c" -e
+#        -Ohz --debug --code_model medium --data_model medium -o
+#        "D:\Projects\Lab
+#        equipment\RFUART\FW\pingpong\STM8L_pingpong\Debug\Obj" --dlib_config
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.3\stm8\LIB\dlstm8mmn.h" -D STM8L15X_LD -lcN "D:\Projects\Lab
+#        equipment\RFUART\FW\pingpong\STM8L_pingpong\Debug\List" -lb
+#        "D:\Projects\Lab
+#        equipment\RFUART\FW\pingpong\STM8L_pingpong\Debug\List" -I
+#        "D:\Projects\Lab equipment\RFUART\FW\STM8L_IAR\" -I "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\src\" -I "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\inc\" -I "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\src\" -I
+#        "D:\Projects\Lab
+#        equipment\RFUART\FW\STM8L_IAR\STM8L15x_StdPeriph_Driver\inc\"
+#        --require_prototypes --vregs 16)
+#    Locale       =  Russian_RUS.1251
+#    List file    =  
+#        D:\Projects\Lab
+#        equipment\RFUART\FW\pingpong\STM8L_pingpong\Debug\List\gpio_interface.lst
+#    Object file  =  
+#        D:\Projects\Lab
+#        equipment\RFUART\FW\pingpong\STM8L_pingpong\Debug\Obj\gpio_interface.o
+#
+###############################################################################
+
+D:\Projects\Lab equipment\RFUART\FW\pingpong\STM8L_pingpong\src\gpio_interface.c
+      1          #include "gpio_interface.h"
+      2          
+      3          void initIO(void);
+      4          
+      5          void Green_On (void);
+      6          void Green_Off (void);
+      7          void Red_On (void);
+      8          void Red_Off (void);
+      9          
+     10          void RF69_select(void);
+     11          void RF69_deselect(void);
+     12          void checkDIO0(void);
+     13          uint8_t checkDIO1(void);
+     14          void RF69_HWreset (void);
+     15          
+     16          void cbDIO0irq (void);
+     17          void cbDIO1irq(void);
+     18          
+     19          void initIO(void)
+     20          {
+     21            //port A 
+     22            //PA3 - TXD, PA4 - RXD
+     23            GPIO_Init(UARTPORT, TXD_PIN, GPIO_Mode_Out_PP_High_Fast);
+     24            GPIO_Init(UARTPORT, RXD_PIN, GPIO_Mode_In_PU_No_IT);
+     25            //port B
+     26            //PB0, PB1 - LED's, PB4 - NSS, PB5 - SCK, PB6 - MOSI, PB7 - MISO 
+     27            GPIO_Init(LEDPORT, RED, GPIO_Mode_Out_OD_HiZ_Slow);
+     28            GPIO_Init(LEDPORT, GREEN, GPIO_Mode_Out_OD_HiZ_Slow);
+     29            GPIO_Init(SPIPORT, NSS_PIN, GPIO_Mode_Out_PP_High_Fast);
+     30            GPIO_Init(SPIPORT, SCK_PIN, GPIO_Mode_Out_PP_Low_Fast);
+     31            GPIO_Init(SPIPORT, MOSI_PIN, GPIO_Mode_Out_PP_Low_Fast);
+     32            GPIO_Init(SPIPORT, MISO_PIN, GPIO_Mode_In_FL_No_IT);
+     33            GPIO_WriteBit(SPIPORT, NSS_PIN, SET); 
+     34            //port C
+     35            //PC0 - IRQ, PC1 - RF reset, PC4 - PRG pin, PC5, PC6 - keys
+     36            GPIO_Init(RFPORT, DIO0_PIN, GPIO_Mode_In_FL_No_IT);
+     37            GPIO_Init(RFPORT, DIO1_PIN, GPIO_Mode_In_FL_No_IT);
+     38            GPIO_Init(RFPORT, RESET_PIN, GPIO_Mode_In_FL_No_IT); 
+     39          
+     40            //GPIO_Init(KEYPORT, PRG_PIN, GPIO_Mode_In_PU_No_IT);
+     41          
+     42            GPIO_Init(KEYPORT, K0, GPIO_Mode_In_PU_No_IT);
+     43            GPIO_Init(KEYPORT, K1, GPIO_Mode_In_PU_No_IT);
+     44            //port D - not in use, no init
+     45            
+     46              //UART GPIO settings
+     47            GPIO_Init(UARTPORT, TXD_PIN, GPIO_Mode_Out_PP_High_Fast);
+     48            GPIO_Init(UARTPORT, RXD_PIN, GPIO_Mode_In_PU_No_IT);
+     49            GPIO_Init(DE_PORT, DE, GPIO_Mode_Out_PP_High_Fast);  
+     50            
+     51            
+     52            //external interrupt (DIO0/IRQ, DIO1)
+     53            EXTI_DeInit();
+     54            EXTI_SetPinSensitivity(DIO0_EXTI_PIN, EXTI_Trigger_Rising); 
+     55            EXTI_SetPinSensitivity(DIO1_EXTI_PIN, EXTI_Trigger_Rising);
+     56             
+     57          }
+     58          
+     59          
+     60          void cbDIO0irq (void)
+     61          {
+     62            
+     63            if (EXTI_GetITStatus(DIO0_IT_PIN) == SET)
+     64            {
+     65              EXTI_ClearITPendingBit(DIO0_IT_PIN);
+     66              
+     67              RF69_RXflag = 1;
+     68            }
+     69              
+     70           
+     71          }
+     72          
+     73          void cbDIO1irq(void)
+     74          {
+     75              if (EXTI_GetITStatus(DIO1_IT_PIN) == SET)
+     76            {
+     77              EXTI_ClearITPendingBit(DIO1_IT_PIN);
+     78              //GPIO_Init(RFPORT, DIO1_PIN, GPIO_Mode_In_FL_No_IT);
+     79              RF69_RXtimeout = 1;
+     80              
+     81            }
+     82          }
+     83          
+     84          void Green_On (void)
+     85          {
+     86            GPIO_WriteBit(LEDPORT, GREEN, RESET);
+     87          }
+     88            
+     89          void Green_Off (void)
+     90          {
+     91            GPIO_WriteBit(LEDPORT, GREEN, SET);
+     92          }
+     93            
+     94          void Red_On (void)
+     95          {
+     96            GPIO_WriteBit(LEDPORT, RED, RESET);
+     97          }
+     98            
+     99          void Red_Off (void)
+    100          {
+    101            GPIO_WriteBit(LEDPORT, RED, SET);
+    102          }
+    103            
+    104          void RF69_select(void)
+    105          {
+    106            GPIO_WriteBit(SPIPORT, NSS_PIN, RESET);  
+    107          }
+    108          
+    109          void RF69_deselect(void)
+    110          {
+    111            GPIO_WriteBit(SPIPORT, NSS_PIN, SET); 
+    112          }
+    113          
+    114          void checkDIO0(void)
+    115          {
+    116            while(GPIO_ReadInputDataBit(RFPORT, DIO0_PIN) == RESET);
+    117          }
+    118          
+    119          uint8_t checkDIO1(void)
+    120          {
+    121            if (GPIO_ReadInputDataBit(RFPORT, DIO1_PIN) == RESET) return 0;
+    122            else return 1;
+    123          }
+    124          
+    125          //hardware reset
+    126          void RF69_HWreset (void)
+    127          {
+    128              //set reset port as output
+    129              GPIO_Init(RFPORT, RESET_PIN, GPIO_Mode_Out_PP_Low_Fast);
+    130              GPIO_WriteBit(RFPORT, RESET_PIN, SET);
+    131          	//delay 5...10 ms
+    132              delay_ms(10);
+    133              GPIO_WriteBit(RFPORT, RESET_PIN, RESET);
+    134              //set reset port as HI-Z input
+    135              GPIO_Init(RFPORT, RESET_PIN, GPIO_Mode_In_FL_No_IT);
+    136              delay_ms(10);
+    137              
+    138          	
+    139          }
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       9  ??Subroutine6_0
+      26  ?Subroutine0
+       2  ?Subroutine1
+      12  ?Subroutine2
+       7  ?Subroutine3
+       9  ?Subroutine4
+       7  ?Subroutine5
+      13  Green_Off
+      11  Green_On
+      40  RF69_HWreset
+      13  RF69_deselect
+      11  RF69_select
+      13  Red_Off
+      11  Red_On
+      20  cbDIO0irq
+      23  cbDIO1irq
+      14  checkDIO0
+      18  checkDIO1
+     144  initIO
+
+ 
+ 403 bytes in section .far_func.text
+ 
+ 403 bytes of CODE memory
+
+Errors: none
+Warnings: none
